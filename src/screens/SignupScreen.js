@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import DismissKeyboard from '../components/DismissKeyboard';
 
-const LoginScreen = () => {
+const SignupScreen = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -14,21 +15,22 @@ const LoginScreen = () => {
         </View>
         <TextInput
           style={styles.inputBox}
+          value={name}
+          onChangeText={input => setName(input)}
+          placeholder='Full name' />
+        <TextInput
+          style={styles.inputBox}
           value={email}
           onChangeText={input => setEmail(input)}
-          placeholder='Email'
-          autoCapitalize='none' />
+          placeholder='Email' />
         <TextInput
           style={styles.inputBox}
           value={password}
           onChangeText={input => setPassword(input)}
-          placeholder='Password'
-          autoCapitalize='none'
-          secureTextEntry={true} />
+          placeholder='Password' />
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
+          <Text style={styles.buttonText}>Signup</Text>
         </TouchableOpacity>
-        <Button title="Don't have an account yet? Sign up" />
       </View>
     </DismissKeyboard>
   );
@@ -50,20 +52,20 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     width: '85%',
+    textAlign: 'center',
+    fontSize: 16,
     margin: 10,
     padding: 15,
-    fontSize: 16,
     borderColor: '#d3d3d3',
-    borderWidth: 1,
-    textAlign: 'center'
+    borderWidth: 1
   },
   button: {
     marginTop: 30,
     marginBottom: 20,
     paddingVertical: 5,
     alignItems: 'center',
-    backgroundColor: '#F6820D',
-    borderColor: '#F6820D',
+    backgroundColor: '#FFA611',
+    borderColor: '#FFA611',
     borderWidth: 1,
     borderRadius: 5,
     width: 200
@@ -75,4 +77,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginScreen;
+export default SignupScreen;
