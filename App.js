@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import SelectScreen from "./src/screens/main/SelectScreen";
+import LoginScreen from "./src/screens/LoginScreen";
 
 const App = () => {
   return (
     <>
-      <SelectScreen />
+      <LoginScreen />
     </>
   );
 }
