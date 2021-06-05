@@ -28,7 +28,7 @@ const LoginScreen = () => {
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-        <Button title="Don't have an account yet? Sign up" />
+        <Button title="Get started" />
       </View>
     </DismissKeyboard>
   );
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 16,
     borderColor: '#d3d3d3',
-    borderWidth: 1,
+    borderBottomWidth: 1,
     textAlign: 'center'
   },
   button: {
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6820D',
     borderColor: '#F6820D',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 20,
     width: 200
   },
   buttonText: {

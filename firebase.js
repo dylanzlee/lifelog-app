@@ -1,4 +1,7 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import 'firebase/storage';
 import {
   API_KEY,
   AUTH_DOMAIN,
@@ -6,10 +9,10 @@ import {
   STORAGE_BUCKET,
   MESSAGING_SENDER_ID,
   APP_ID
-} from 'react-native-dotenv'
+} from '@env';
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+const config = {
   apiKey: API_KEY,
   authDomain: AUTH_DOMAIN,
   projectId: PROJECT_ID,
@@ -18,7 +21,11 @@ const firebaseConfig = {
   appId: APP_ID
 };
 
-// Initialize Firebase
-const Firebase = firebase.initializeApp(firebaseConfig);
+const fire = firebase.initializeApp(config);
 
-export default Firebase
+export const auth = fire.auth();
+export const db = fire.firestore();
+export default {
+  fire,
+};
+// export default !firebase.apps.length ? firebaseApp : firebase.app();
