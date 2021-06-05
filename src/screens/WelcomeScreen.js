@@ -1,19 +1,22 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import DismissKeyboard from '../components/DismissKeyboard'; 
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.nameContainer}>
         <Text style={styles.name}>LifeLog</Text>
       </View>
-      <View style={styles.buttons}>
-        <TouchableOpacity>
-          <Text>Get started</Text>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          style={styles.signupButton}
+          onPress={() => navigation.push("SignUp")} >
+          <Text style={styles.buttonText}>Get started</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>Log in</Text>
+        <TouchableOpacity
+        style={styles.loginbutton}
+        onPress={() => navigation.push("Login")} >
+          <Text style={styles.buttonText}>Log in</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -32,10 +35,36 @@ const styles = StyleSheet.create({
     paddingBottom: 50
   },
   name: {
-    fontSize: 40
+    fontSize: 45
   },
-  buttons: {
-    alignItems: 'center'
+  buttonsContainer: {
+    alignItems: 'center',
+    marginTop: 70
+  },
+  signupButton: {
+    margin: 10,
+    paddingVertical: 10,
+    alignItems: 'center',
+    backgroundColor: '#FFA611',
+    borderColor: '#FFA611',
+    borderWidth: 1,
+    borderRadius: 20,
+    width: 280
+  },
+  loginbutton: {
+    margin: 10,
+    paddingVertical: 10,
+    alignItems: 'center',
+    backgroundColor: '#F6820D',
+    borderColor: '#F6820D',
+    borderWidth: 1,
+    borderRadius: 20,
+    width: 280
+  },
+  buttonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff'
   }
 });
 

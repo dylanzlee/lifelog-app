@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import DismissKeyboard from '../components/DismissKeyboard';
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -28,7 +28,9 @@ const LoginScreen = () => {
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-        <Button title="Get started" />
+        <TouchableOpacity onPress={() => navigation.push("SignUp")}>
+          <Text style={styles.buttonSignup}>Get started</Text>
+        </TouchableOpacity>
       </View>
     </DismissKeyboard>
   );
@@ -72,6 +74,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#fff'
+  },
+  buttonSignup: {
+    color: '#FFA611',
+    fontSize: 18
   }
 });
 
