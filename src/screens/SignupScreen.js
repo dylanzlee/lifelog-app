@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import DismissKeyboard from '../components/DismissKeyboard';
 
 const SignupScreen = () => {
@@ -9,9 +9,9 @@ const SignupScreen = () => {
 
   return (
     <DismissKeyboard>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.nameContainer}>
-          <Text style={styles.name}>LifeLog</Text>
+          <Text style={styles.name}>lifelog</Text>
         </View>
         <TextInput
           style={styles.inputBox}
@@ -29,9 +29,9 @@ const SignupScreen = () => {
           onChangeText={input => setPassword(input)}
           placeholder='Password' />
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Signup</Text>
+          <Text style={styles.buttonText}>Create account</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     </DismissKeyboard>
   );
 }
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 30,
     marginBottom: 20,
-    paddingVertical: 5,
+    paddingVertical: 6,
     alignItems: 'center',
     backgroundColor: '#FFA611',
     borderColor: '#FFA611',

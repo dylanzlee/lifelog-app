@@ -1,32 +1,47 @@
 import React from "react"
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import SelectBox from '../components/SelectBox';
 
 const SelectScreen = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.text}>
-        <Text>Welcome to LifeLog</Text>
-        <Text>This is the select screen</Text>
-        <Text>Coming soon!</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.row}>
+        <SelectBox
+          backgroundColor='#FFF8DC'
+          title='Exercise' />
+        <SelectBox
+          backgroundColor='#E6E6FA'
+          title='Cooking' />
       </View>
-    </View>
+      <View style={styles.row}>
+        <SelectBox
+          backgroundColor='#E3FFB5'
+          title='Cleaning' />
+        <SelectBox 
+          backgroundColor='#AFEEEE'
+          title='Spending' />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
+    // flex: 1,
+    backgroundColor: 'black',
     alignItems: 'center',
     justifyContent: 'center',
+    // flexWrap: 'wrap'
   },
   text: {
-    backgroundColor: 'blue',
-    height: 100,
-    width: '50%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
+    // fontSize: 20
+  },
+  row: {
+    flexDirection: 'row',
+    // width: '100%',
+    height: '50%',
+    // justifyContent: 'space-around',
+  },
 });
 
 export default SelectScreen

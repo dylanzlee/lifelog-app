@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AuthNavigator from './src/navigation/AuthNavigator';
-// import SignupScreen from './src/screens/SignupScreen';
-// import LoginScreen from './src/screens/LoginScreen';
-// import WelcomeScreen from './src/screens/WelcomeScreen';
+import SelectScreen from './src/screens/SelectScreen';
+import SelectBox from './src/components/SelectBox';
+
 
 const App = () => {
   return (
     <>
-      <AuthNavigator />
+      {/* <AuthNavigator /> */}
+      <SelectScreen />
+      {/* <SelectBox 
+        backgroundColor='#FFF8DC'
+        title='Exercise' /> */}
     </>
   );
 }
 
 export default App;
-

@@ -10,7 +10,7 @@ const LoginScreen = ({ navigation }) => {
     <DismissKeyboard>
       <View style={styles.container}>
         <View style={styles.nameContainer}>
-          <Text style={styles.name}>LifeLog</Text>
+          <Text style={styles.name}>lifelog</Text>
         </View>
         <TextInput
           style={styles.inputBox}
@@ -30,6 +30,9 @@ const LoginScreen = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.push("SignUp")}>
           <Text style={styles.buttonSignup}>Get started</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => alert('R.I.P my guy :(')}>
+          <Text style={styles.buttonForgotPassword}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
     </DismissKeyboard>
@@ -78,6 +81,11 @@ const styles = StyleSheet.create({
   buttonSignup: {
     color: '#FFA611',
     fontSize: 18
+  },
+  buttonForgotPassword: {
+    color: '#ff6c70',
+    fontSize: 16,
+    marginTop: 20
   }
 });
 

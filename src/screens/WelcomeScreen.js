@@ -5,7 +5,7 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.nameContainer}>
-        <Text style={styles.name}>LifeLog</Text>
+        <Text style={styles.name}>lifelog</Text>
       </View>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
@@ -16,7 +16,7 @@ const WelcomeScreen = ({ navigation }) => {
         <TouchableOpacity
         style={styles.loginbutton}
         onPress={() => navigation.push("Login")} >
-          <Text style={styles.buttonText}>Log in</Text>
+          <Text style={styles.buttonText}>I have an account</Text>
         </TouchableOpacity>
       </View>
     </View>
