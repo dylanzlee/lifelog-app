@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import DismissKeyboard from '../components/DismissKeyboard';
+import { BaseText } from '../constants/TextStyles';
+import colors from '../constants/colors';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const SignupScreen = () => {
   const [name, setName] = useState('');
@@ -11,25 +14,28 @@ const SignupScreen = () => {
     <DismissKeyboard>
       <SafeAreaView style={styles.container}>
         <View style={styles.nameContainer}>
-          <Text style={styles.name}>lifelog</Text>
+          <BaseText style={styles.name}>log</BaseText>
         </View>
         <TextInput
           style={styles.inputBox}
           value={name}
           onChangeText={input => setName(input)}
-          placeholder='Full name' />
+          placeholder='Full name'
+          placeholderTextColor='black' />
         <TextInput
           style={styles.inputBox}
           value={email}
           onChangeText={input => setEmail(input)}
-          placeholder='Email' />
+          placeholder='Email'
+          placeholderTextColor='black' />
         <TextInput
           style={styles.inputBox}
           value={password}
           onChangeText={input => setPassword(input)}
-          placeholder='Password' />
+          placeholder='Password'
+          placeholderTextColor='black' />
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Create account</Text>
+          <BaseText style={styles.buttonText}>Create account</BaseText>
         </TouchableOpacity>
       </SafeAreaView>
     </DismissKeyboard>
@@ -39,7 +45,7 @@ const SignupScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.authBGColor,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -48,7 +54,8 @@ const styles = StyleSheet.create({
     paddingBottom: 50
   },
   name: {
-    fontSize: 40
+    fontSize: 40,
+    color: colors.authButtonColor,
   },
   inputBox: {
     width: '85%',
@@ -57,24 +64,25 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 15,
     borderColor: '#d3d3d3',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    color: '#f8f8ff',
   },
   button: {
     marginTop: 30,
     marginBottom: 20,
-    paddingVertical: 6,
+    paddingVertical: 10,
     alignItems: 'center',
-    backgroundColor: '#FFA611',
-    borderColor: '#FFA611',
+    backgroundColor: colors.authButtonColor,
+    borderColor: colors.authButtonColor,
     borderWidth: 1,
     borderRadius: 20,
-    width: 200
+    width: 240
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#fff'
-  }
+    color: colors.authBGColor,
+  },
 });
 
 export default SignupScreen;

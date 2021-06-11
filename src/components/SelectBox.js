@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import BaseText from '../components/BaseText';
+import { BaseText } from '../constants/TextStyles';
 
 const SelectBox = (props) => {
   return (
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
-    backgroundColor: 'black'
+    backgroundColor: 'black',
   },
   box: {
     width: '95%',

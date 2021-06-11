@@ -3,10 +3,10 @@ import { View, StyleSheet } from 'react-native';
 import { BaseText } from '../constants/TextStyles';
 import colors from '../constants/colors';
 
-const ProfileScreen = () => {
+const AddLogScreen = () => {
   return (
     <View style={styles.container}>
-      <BaseText style={{ color: colors.authButtonColor }}>This is the profile screen</BaseText>
+      <BaseText style={{ color: colors.authBGColor }}>Add a new log!</BaseText>
     </View>
   );
 }
@@ -14,10 +14,10 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   }
 });
 
-export default ProfileScreen;
+export default AddLogScreen;

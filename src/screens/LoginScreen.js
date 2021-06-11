@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import DismissKeyboard from '../components/DismissKeyboard';
+import { BaseText } from '../constants/TextStyles';
+import colors from '../constants/colors';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -10,29 +12,31 @@ const LoginScreen = ({ navigation }) => {
     <DismissKeyboard>
       <View style={styles.container}>
         <View style={styles.nameContainer}>
-          <Text style={styles.name}>lifelog</Text>
+          <BaseText style={styles.name}>log</BaseText>
         </View>
         <TextInput
           style={styles.inputBox}
           value={email}
           onChangeText={input => setEmail(input)}
           placeholder='Email'
+          placeholderTextColor='black'
           autoCapitalize='none' />
         <TextInput
           style={styles.inputBox}
           value={password}
           onChangeText={input => setPassword(input)}
           placeholder='Password'
+          placeholderTextColor='black'
           autoCapitalize='none'
           secureTextEntry={true} />
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
+          <BaseText style={styles.buttonText}>Login</BaseText>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.push("SignUp")}>
-          <Text style={styles.buttonSignup}>Get started</Text>
-        </TouchableOpacity>
+        {/* <TouchableOpacity onPress={() => navigation.push("SignUp")}>
+          <BaseText style={styles.buttonSignup}>Get started</BaseText>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={() => alert('R.I.P my guy :(')}>
-          <Text style={styles.buttonForgotPassword}>Forgot your password?</Text>
+          <BaseText style={styles.buttonForgotPassword}>Forgot your password?</BaseText>
         </TouchableOpacity>
       </View>
     </DismissKeyboard>
@@ -42,7 +46,7 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.authBGColor,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -51,7 +55,8 @@ const styles = StyleSheet.create({
     paddingBottom: 50
   },
   name: {
-    fontSize: 40
+    fontSize: 40,
+    color: colors.authButtonColor,
   },
   inputBox: {
     width: '85%',
@@ -60,32 +65,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderColor: '#d3d3d3',
     borderBottomWidth: 1,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'white',
   },
   button: {
     marginTop: 30,
     marginBottom: 20,
-    paddingVertical: 5,
+    paddingVertical: 10,
     alignItems: 'center',
-    backgroundColor: '#F6820D',
-    borderColor: '#F6820D',
+    backgroundColor: colors.authBGColor,
+    borderColor: colors.authButtonColor,
     borderWidth: 1,
     borderRadius: 20,
-    width: 200
+    width: 240
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#fff'
+    color: colors.authButtonColor,
   },
-  buttonSignup: {
-    color: '#FFA611',
-    fontSize: 18
-  },
+  // buttonSignup: {
+  //   color: colors.authButtonColor,
+  //   fontSize: 16
+  // },
   buttonForgotPassword: {
-    color: '#ff6c70',
+    color: colors.authButtonColor,
     fontSize: 16,
-    marginTop: 20
+    // marginTop: 20
   }
 });
 

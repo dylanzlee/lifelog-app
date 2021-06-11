@@ -1,22 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { BaseText } from '../constants/TextStyles';
+import colors from '../constants/colors';
 
 const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.nameContainer}>
-        <Text style={styles.name}>lifelog</Text>
+        <BaseText style={styles.name}>log</BaseText>
       </View>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
-          style={styles.signupButton}
+          style={styles.button}
           onPress={() => navigation.push("SignUp")} >
-          <Text style={styles.buttonText}>Get started</Text>
+          <BaseText style={styles.buttonText}>Get started</BaseText>
         </TouchableOpacity>
         <TouchableOpacity
-        style={styles.loginbutton}
-        onPress={() => navigation.push("Login")} >
-          <Text style={styles.buttonText}>I have an account</Text>
+          style={[styles.button, { backgroundColor: colors.authBGColor, marginTop: 10 }]}
+          onPress={() => navigation.push("Login")}>
+          <BaseText style={styles.loginText}>I have an account</BaseText>
         </TouchableOpacity>
       </View>
     </View>
@@ -26,45 +28,43 @@ const WelcomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.authBGColor,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   nameContainer: {
     marginBottom: 20,
-    paddingBottom: 50
+    paddingBottom: 50,
   },
   name: {
-    fontSize: 45
+    fontSize: 45,
+    color: colors.authButtonColor,
   },
   buttonsContainer: {
     alignItems: 'center',
-    marginTop: 70
+    marginTop: 70,
+    width: '100%',
+    top: '10%',
   },
-  signupButton: {
+  button: {
     margin: 10,
-    paddingVertical: 10,
+    paddingVertical: 11,
     alignItems: 'center',
-    backgroundColor: '#FFA611',
-    borderColor: '#FFA611',
+    backgroundColor: colors.authButtonColor,
+    borderColor: colors.authButtonColor,
     borderWidth: 1,
     borderRadius: 20,
-    width: 280
-  },
-  loginbutton: {
-    margin: 10,
-    paddingVertical: 10,
-    alignItems: 'center',
-    backgroundColor: '#F6820D',
-    borderColor: '#F6820D',
-    borderWidth: 1,
-    borderRadius: 20,
-    width: 280
+    width: 300,
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#fff'
+    color: colors.authBGColor,
+  },
+  loginText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.authButtonColor,
   }
 });
 

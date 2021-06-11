@@ -4,7 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LogsScreen from '../screens/LogsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import AddLogScreen from '../screens/AddLogScreen';
 import { AntDesign } from '@expo/vector-icons';
+import colors from '../constants/colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,8 +24,18 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <View style={styles.tab}>
-              <AntDesign name="book" size={24} color={focused ? 'white' : 'grey'} />
-              <Text style={[styles.name, { color: focused ? 'white' : 'grey' }]}>Logs</Text>
+              <AntDesign name="book" size={24} color={focused ? colors.authButtonColor : 'grey'} />
+              <Text style={[styles.name, { color: focused ? colors.authButtonColor : 'grey' }]}>Logs</Text>
+            </View>
+          ),
+        }} />
+      <Tab.Screen
+        name="AddLog"
+        component={AddLogScreen}
+        options={{
+          tabBarIcon: () => (
+            <View style={[styles.tab, { top: 4 }]}>
+              <AntDesign name="pluscircleo" size={40} color={colors.authButtonColor} />
             </View>
           ),
         }} />
@@ -33,8 +45,8 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <View style={styles.tab}>
-              <AntDesign name="user" size={24} color={focused ? 'white' : 'grey'} />
-              <Text style={[styles.name, { color: focused ? 'white' : 'grey' }]}>Profile</Text>
+              <AntDesign name="user" size={24} color={focused ? colors.authButtonColor : 'grey'} />
+              <Text style={[styles.name, { color: focused ? colors.authButtonColor : 'grey' }]}>Profile</Text>
             </View>
           ),
         }} />
@@ -57,11 +69,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 200,
-    top: 8,
+    top: 6,
   },
   name: {
     marginTop: 1,
-  }
+  },
 });
 
 export default TabNavigator;

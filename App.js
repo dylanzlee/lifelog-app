@@ -1,15 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import AuthNavigator from './src/navigation/AuthNavigator';
-import TabNavigator from './src/navigation/TabNavigator';
+import Routes from './src/navigation/Routes';
 
 const App = () => {
   return (
-    <NavigationContainer>
-      {/* <AuthNavigator /> */}
-      <TabNavigator />
-    </NavigationContainer>
+    <Routes />
   );
 }
 
