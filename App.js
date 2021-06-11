@@ -1,19 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from './src/navigation/AuthNavigator';
-import SelectScreen from './src/screens/SelectScreen';
-import SelectBox from './src/components/SelectBox';
-
+import TabNavigator from './src/navigation/TabNavigator';
 
 const App = () => {
   return (
-    <>
+    <NavigationContainer>
       {/* <AuthNavigator /> */}
-      <SelectScreen />
-      {/* <SelectBox 
-        backgroundColor='#FFF8DC'
-        title='Exercise' /> */}
-    </>
+      <TabNavigator />
+    </NavigationContainer>
   );
 }
 

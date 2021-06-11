@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { auth } from '../../firebase';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import SignupScreen from '../screens/SignupScreen';
@@ -20,22 +20,20 @@ const AuthNavigator = () => {
   // });
 
   return (
-    <NavigationContainer theme={DefaultTheme}>
-      <AuthStack.Navigator>
-        <AuthStack.Screen
-          name="Welcome"
-          component={WelcomeScreen}
-          options={{ title: "" }} />
-        <AuthStack.Screen
-          name="SignUp"
-          component={SignupScreen}
-          options={{ title: "" }} />
-        <AuthStack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ title: "" }} />
-      </AuthStack.Navigator>
-    </NavigationContainer>
+    <AuthStack.Navigator>
+      <AuthStack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{ title: "" }} />
+      <AuthStack.Screen
+        name="SignUp"
+        component={SignupScreen}
+        options={{ title: "" }} />
+      <AuthStack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ title: "" }} />
+    </AuthStack.Navigator>
   );
 }
 
