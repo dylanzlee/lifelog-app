@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import DismissKeyboard from '../components/DismissKeyboard';
 import { BaseText } from '../constants/TextStyles';
 import colors from '../constants/colors';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { AuthContext } from '../navigation/AuthProvider';
 
 const SignupScreen = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const {register} = useContext(AuthContext);
 
   return (
     <DismissKeyboard>
@@ -27,15 +29,23 @@ const SignupScreen = () => {
           value={email}
           onChangeText={input => setEmail(input)}
           placeholder='Email'
-          placeholderTextColor='black' />
+          placeholderTextColor='black'
+          autoCapitalize='none' />
         <TextInput
           style={styles.inputBox}
           value={password}
           onChangeText={input => setPassword(input)}
           placeholder='Password'
-          placeholderTextColor='black' />
-        <TouchableOpacity style={styles.button}>
-          <BaseText style={styles.buttonText}>Create account</BaseText>
+          placeholderTextColor='black'
+          autoCapitalize='none'
+          secureTextEntry={true} />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => register(email.trim().toLowerCase(), password)}
+        >
+          <BaseText style={styles.buttonText}>
+            Create account
+          </BaseText>
         </TouchableOpacity>
       </SafeAreaView>
     </DismissKeyboard>

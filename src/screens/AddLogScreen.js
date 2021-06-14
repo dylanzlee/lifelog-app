@@ -14,7 +14,7 @@ const AddLogScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: colors.authButtonColor,
     justifyContent: 'center',
     alignItems: 'center',
   }

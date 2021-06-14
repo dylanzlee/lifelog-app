@@ -8,7 +8,8 @@ import {
   PROJECT_ID,
   STORAGE_BUCKET,
   MESSAGING_SENDER_ID,
-  APP_ID
+  APP_ID,
+  MEASUREMENT_ID
 } from '@env';
 
 // Your web app's Firebase configuration
@@ -18,14 +19,14 @@ const config = {
   projectId: PROJECT_ID,
   storageBucket: STORAGE_BUCKET,
   messagingSenderId: MESSAGING_SENDER_ID,
-  appId: APP_ID
+  appId: APP_ID,
+  measurementId: MEASUREMENT_ID
 };
 
 const fire = firebase.initializeApp(config);
+// firebase.analytics();
 
 export const auth = fire.auth();
 export const db = fire.firestore();
-export default {
-  fire,
-};
-// export default !firebase.apps.length ? firebaseApp : firebase.app();
+export default fire;
+// export default !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();

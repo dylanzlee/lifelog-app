@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import DismissKeyboard from '../components/DismissKeyboard';
 import { BaseText } from '../constants/TextStyles';
+import { AuthContext } from '../navigation/AuthProvider';
 import colors from '../constants/colors';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const {login} = useContext(AuthContext);
 
   return (
     <DismissKeyboard>
@@ -20,7 +23,8 @@ const LoginScreen = ({ navigation }) => {
           onChangeText={input => setEmail(input)}
           placeholder='Email'
           placeholderTextColor='black'
-          autoCapitalize='none' />
+          autoCapitalize='none'
+        />
         <TextInput
           style={styles.inputBox}
           value={password}
@@ -28,8 +32,12 @@ const LoginScreen = ({ navigation }) => {
           placeholder='Password'
           placeholderTextColor='black'
           autoCapitalize='none'
-          secureTextEntry={true} />
-        <TouchableOpacity style={styles.button}>
+          secureTextEntry={true}
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => login(email, password)}
+        >
           <BaseText style={styles.buttonText}>Login</BaseText>
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={() => navigation.push("SignUp")}>

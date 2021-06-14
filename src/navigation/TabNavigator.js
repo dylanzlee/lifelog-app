@@ -1,14 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet, Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LogsScreen from '../screens/LogsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import AddLogScreen from '../screens/AddLogScreen';
 import { AntDesign } from '@expo/vector-icons';
 import colors from '../constants/colors';
+import { createStackNavigator } from '@react-navigation/stack';
+import AddLogScreen from '../screens/AddLogScreen';
 
 const Tab = createBottomTabNavigator();
+
+const Placeholder = () => <View style={{ flex: 1, backgroundColor: 'black' }}></View>
 
 const TabNavigator = () => {
   return (
@@ -28,17 +30,25 @@ const TabNavigator = () => {
               <Text style={[styles.name, { color: focused ? colors.authButtonColor : 'grey' }]}>Logs</Text>
             </View>
           ),
-        }} />
+        }}
+      />
       <Tab.Screen
-        name="AddLog"
-        component={AddLogScreen}
+        name="Add"
+        component={Placeholder}
         options={{
           tabBarIcon: () => (
             <View style={[styles.tab, { top: 4 }]}>
-              <AntDesign name="pluscircleo" size={40} color={colors.authButtonColor} />
+                <AntDesign name="pluscircleo" size={40} color={colors.authButtonColor} />
             </View>
           ),
-        }} />
+        }}
+        listeners={({ navigation }) => ({
+          tabPress: event => {
+            event.preventDefault();
+            navigation.navigate("AddLog");
+          }
+        })}
+      />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
@@ -49,8 +59,40 @@ const TabNavigator = () => {
               <Text style={[styles.name, { color: focused ? colors.authButtonColor : 'grey' }]}>Profile</Text>
             </View>
           ),
-        }} />
+        }}
+      />
     </Tab.Navigator>
+  );
+}
+
+const TabStack = createStackNavigator();
+
+const TabStackNavigator = () => {
+  return (
+    <TabStack.Navigator mode='modal'>
+      <TabStack.Screen
+        name="Tabs"
+        component={TabNavigator}
+        options={{ headerShown: false }}
+      />
+      <TabStack.Screen
+        name="AddLog"
+        component={AddLogScreen}
+        options={({ navigation }) => ({
+          title: "",
+          headerStyle: styles.modalHeader,
+          headerLeft: () => (
+            <AntDesign
+              name="close"
+              size={35}
+              color='black'
+              onPress={() => navigation.goBack()}
+            />
+          ),
+          headerLeftContainerStyle: styles.crossButton,
+        })}
+      />
+    </TabStack.Navigator>
   );
 }
 
@@ -74,6 +116,16 @@ const styles = StyleSheet.create({
   name: {
     marginTop: 1,
   },
+  modalHeader: {
+    backgroundColor: colors.authButtonColor,
+    borderBottomWidth: 0,
+    shadowOpacity: 0,
+  },
+  crossButton: {
+    marginLeft: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
-export default TabNavigator;
+export default TabStackNavigator;
