@@ -40,9 +40,6 @@ const LoginScreen = ({ navigation }) => {
         >
           <BaseText style={styles.buttonText}>Login</BaseText>
         </TouchableOpacity>
-        {/* <TouchableOpacity onPress={() => navigation.push("SignUp")}>
-          <BaseText style={styles.buttonSignup}>Get started</BaseText>
-        </TouchableOpacity> */}
         <TouchableOpacity onPress={() => alert('R.I.P my guy :(')}>
           <BaseText style={styles.buttonForgotPassword}>Forgot your password?</BaseText>
         </TouchableOpacity>
@@ -71,6 +68,7 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 15,
     fontSize: 16,
+    fontFamily: 'Futura',
     borderColor: '#d3d3d3',
     borderBottomWidth: 1,
     textAlign: 'center',
@@ -92,14 +90,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.authButtonColor,
   },
-  // buttonSignup: {
-  //   color: colors.authButtonColor,
-  //   fontSize: 16
-  // },
   buttonForgotPassword: {
     color: colors.authButtonColor,
     fontSize: 16,
-    // marginTop: 20
   }
 });
 

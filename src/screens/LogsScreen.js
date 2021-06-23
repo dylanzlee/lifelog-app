@@ -1,33 +1,32 @@
-import React from "react"
+import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, SafeAreaView } from 'react-native';
-import SelectBox from '../components/SelectBox';
-// import { useDimensions, useDeviceOrientation } from '@react-native-community/hooks';
+import { useIsFocused } from '@react-navigation/native';
+import colors from '../constants/colors'; 
+import { BaseText } from '../constants/TextStyles';
+import DisplayLogsScreen from "./DisplayLogsScreen";
+import { db } from '../../firebase';
+import { AuthContext } from '../navigation/AuthProvider';
 
 const LogsScreen = () => {
+  const isFocused = useIsFocused();
+  const {user} = useContext(AuthContext);
+  const userRef = db.collection('users').doc(user.uid);
+
+  const [numLogs, setNumLogs] = useState(0);
+
+  useEffect(() => {
+    userRef.get().then(doc => {
+      setNumLogs(doc.data().numLogs);
+    })
+  }, [isFocused]);
+
   return (
     <SafeAreaView style={styles.wrapper}>
-      <View style={styles.container}>
-        <View style={styles.box}>
-          <SelectBox
-            backgroundColor='#FFF8DC'
-            title='Exercise' />
+      {numLogs == 0 ? 
+        <View style={styles.messageContainer}>
+          <BaseText style={styles.message}>Your logs will be displayed here</BaseText>
         </View>
-        <View style={styles.box}>
-          <SelectBox
-            backgroundColor='#E6E6FA'
-            title='Cooking' />
-        </View>
-        <View style={styles.box}>
-          <SelectBox
-            backgroundColor='#E3FFB5'
-            title='Cleaning' />
-        </View>
-        <View style={styles.box}>
-          <SelectBox
-            backgroundColor='#AFEEEE'
-            title='Spending' />
-        </View>
-      </View>
+        : <DisplayLogsScreen />}
     </SafeAreaView>
   );
 }
@@ -36,19 +35,17 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: 'black',
-  },  
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignContent: 'flex-start',
-    flexWrap: 'wrap',
-    paddingLeft: '4%'
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  box: {
-    width: '48%',
-    aspectRatio: 1,
+  messageContainer: {
+    justifyContent: 'center',
+    alignContent: 'center',
   },
+  message: {
+    color: colors.authButtonColor,
+    fontSize: 18,
+  }
 });
 
 export default LogsScreen;

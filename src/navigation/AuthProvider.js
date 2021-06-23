@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
 
 export const AuthContext = createContext();
 
@@ -18,9 +18,18 @@ export const AuthProvider = ({ children }) => {
             alert(e);
           }
         },
-        register: async (email, password) => {
+        register: async (firstName, lastName, email, password) => {
           try {
-            await auth.createUserWithEmailAndPassword(email, password);
+            await auth.createUserWithEmailAndPassword(email, password).then(cred => {
+              return db.collection('users').doc(cred.user.uid).set({
+                name: {
+                  first: firstName,
+                  last: lastName,
+                },
+                numLogs: 0,
+                existingLogNames: [],
+              });
+            });
           } catch (e) {
             alert(e);
           }

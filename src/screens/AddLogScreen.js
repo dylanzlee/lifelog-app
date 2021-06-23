@@ -1,13 +1,87 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { BaseText } from '../constants/TextStyles';
+import DismissKeyboard from '../components/DismissKeyboard';
 import colors from '../constants/colors';
+import { db } from '../../firebase';
+import firebase from 'firebase';
+import { AuthContext } from '../navigation/AuthProvider';
 
-const AddLogScreen = () => {
+const AddLogScreen = ({ navigation }) => {
+  const [logName, setLogName] = useState('');
+  const [unit, setUnit] = useState('');
+  const [minVal, setMinVal] = useState(Number.MIN_VALUE);
+  const [maxVal, setMaxVal] = useState(Number.MAX_VALUE);
+
+  const {user} = useContext(AuthContext);
+  const userRef = db.collection('users').doc(user.uid);
+
   return (
-    <View style={styles.container}>
-      <BaseText style={{ color: colors.authBGColor }}>Add a new log!</BaseText>
-    </View>
+    <DismissKeyboard>
+      <View style={styles.container}>
+        <TextInput 
+          style={styles.inputBox}
+          value={logName}
+          onChangeText={input => setLogName(input.trim())}
+          placeholder='Log Name *'
+        />
+        <TextInput
+          style={styles.inputBox}
+          value={unit}
+          onChangeText={input => setUnit(input.trim())}
+          placeholder='Unit (e.g. mins, kg, dollars)'
+          autoCapitalize='none'
+        />
+        <TextInput
+          style={styles.inputBox}
+          value={minVal}
+          onChangeText={input => {
+            let minInput = input == '' ? Number.MIN_VALUE : input;
+            setMinVal(parseFloat(minInput));
+          }}
+          placeholder='Minimum Value'
+          numeric value
+          keyboardType={'numeric'}
+        />
+        <TextInput
+          style={styles.inputBox}
+          value={maxVal}
+          onChangeText={input => {
+            let maxInput = input == '' ? Number.MAX_VALUE : input;
+            setMaxVal(parseFloat(maxInput));
+          }}
+          placeholder='Maximum Value'
+          numeric value
+          keyboardType={'numeric'}
+        />
+        <BaseText style={styles.note}>Note: Fields with * are required</BaseText>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            if (logName == '') {
+              alert('Log Name is a required field');
+              return;
+            }
+            if (isNaN(minVal) || isNaN(maxVal)) {
+              alert('Minimum Value and Maximum Value must be valid numbers');
+              return;
+            }
+            userRef.collection('logs').doc(logName.toLowerCase()).set({
+              name: logName,
+              unit: unit,
+              minVal: minVal,
+              maxVal: maxVal,
+            });
+            userRef.update({
+              numLogs: firebase.firestore.FieldValue.increment(1),
+            });
+            navigation.navigate("Tabs");
+          }}
+        >
+          <BaseText style={styles.addLogText}>Add log</BaseText>
+        </TouchableOpacity>
+      </View>
+    </DismissKeyboard>
   );
 }
 
@@ -17,7 +91,40 @@ const styles = StyleSheet.create({
     backgroundColor: colors.authButtonColor,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  inputBox: {
+    width: '75%',
+    textAlign: 'center',
+    fontSize: 16,
+    fontFamily: 'Futura',
+    margin: 20,
+    padding: 15,
+    borderColor: colors.authBGColor,
+    borderBottomWidth: 2,
+    color: colors.authBGColor,
+  },
+  button: {
+    marginTop: 30,
+    marginBottom: 20,
+    paddingVertical: 10,
+    alignItems: 'center',
+    backgroundColor: colors.authButtonColor,
+    borderColor: colors.authBGColor,
+    borderWidth: 2,
+    borderRadius: 20,
+    width: 150,
+  },
+  note: {
+    fontSize: 10,
+    alignSelf: 'flex-start',
+    paddingLeft: '12.5%',
+    marginTop: 10,
+  },
+  addLogText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: colors.authBGColor,
+  },
 });
 
 export default AddLogScreen;

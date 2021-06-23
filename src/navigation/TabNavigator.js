@@ -7,6 +7,7 @@ import { AntDesign } from '@expo/vector-icons';
 import colors from '../constants/colors';
 import { createStackNavigator } from '@react-navigation/stack';
 import AddLogScreen from '../screens/AddLogScreen';
+import { BaseText } from '../constants/TextStyles';
 
 const Tab = createBottomTabNavigator();
 
@@ -79,7 +80,7 @@ const TabStackNavigator = () => {
         name="AddLog"
         component={AddLogScreen}
         options={({ navigation }) => ({
-          title: "",
+          headerTitle: <BaseText>Add a new log!</BaseText>,
           headerStyle: styles.modalHeader,
           headerLeft: () => (
             <AntDesign

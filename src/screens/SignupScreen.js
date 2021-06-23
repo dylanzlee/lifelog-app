@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import DismissKeyboard from '../components/DismissKeyboard';
 import { BaseText } from '../constants/TextStyles';
 import colors from '../constants/colors';
 import { AuthContext } from '../navigation/AuthProvider';
 
 const SignupScreen = () => {
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -16,21 +17,32 @@ const SignupScreen = () => {
     <DismissKeyboard>
       <SafeAreaView style={styles.container}>
         <View style={styles.nameContainer}>
-          <BaseText style={styles.name}>log</BaseText>
+          <BaseText style={styles.logName}>log</BaseText>
+        </View>
+        <View style={styles.fullNameContainer}>
+          <TextInput
+            style={styles.inputBoxSmall}
+            value={firstName}
+            onChangeText={input => setFirstName(input.trim())}
+            placeholder='First name'
+            placeholderTextColor='black'
+          />
+          <TextInput
+            style={styles.inputBoxSmall}
+            value={lastName}
+            onChangeText={input => setLastName(input.trim())}
+            placeholder='Last name'
+            placeholderTextColor='black'
+          />
         </View>
         <TextInput
           style={styles.inputBox}
-          value={name}
-          onChangeText={input => setName(input)}
-          placeholder='Full name'
-          placeholderTextColor='black' />
-        <TextInput
-          style={styles.inputBox}
           value={email}
-          onChangeText={input => setEmail(input)}
+          onChangeText={input => setEmail(input.trim().toLowerCase())}
           placeholder='Email'
           placeholderTextColor='black'
-          autoCapitalize='none' />
+          autoCapitalize='none'
+        />
         <TextInput
           style={styles.inputBox}
           value={password}
@@ -38,10 +50,11 @@ const SignupScreen = () => {
           placeholder='Password'
           placeholderTextColor='black'
           autoCapitalize='none'
-          secureTextEntry={true} />
+          secureTextEntry={true}
+        />
         <TouchableOpacity
           style={styles.button}
-          onPress={() => register(email.trim().toLowerCase(), password)}
+          onPress={() => register(firstName, lastName, email, password)}
         >
           <BaseText style={styles.buttonText}>
             Create account
@@ -63,14 +76,29 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingBottom: 50
   },
-  name: {
+  logName: {
     fontSize: 40,
     color: colors.authButtonColor,
+  },
+  fullNameContainer: {
+    flexDirection: 'row',
+  },
+  inputBoxSmall: {
+    width: '40%',
+    textAlign: 'center',
+    fontSize: 16,
+    fontFamily: 'Futura',
+    margin: 10,
+    padding: 15,
+    borderColor: '#d3d3d3',
+    borderBottomWidth: 1,
+    color: '#f8f8ff',
   },
   inputBox: {
     width: '85%',
     textAlign: 'center',
     fontSize: 16,
+    fontFamily: 'Futura',
     margin: 10,
     padding: 15,
     borderColor: '#d3d3d3',

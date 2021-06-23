@@ -12,12 +12,14 @@ const WelcomeScreen = ({ navigation }) => {
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.push("SignUp")} >
+          onPress={() => navigation.push("SignUp")}
+        >
           <BaseText style={styles.buttonText}>Get started</BaseText>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: colors.authBGColor, marginTop: 10 }]}
-          onPress={() => navigation.push("Login")}>
+          onPress={() => navigation.push("Login")}
+        >
           <BaseText style={styles.loginText}>I have an account</BaseText>
         </TouchableOpacity>
       </View>
