@@ -1,35 +1,47 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, View, ScrollView } from 'react-native';
 import SelectBox from '../components/SelectBox';
+import { db } from '../../firebase';
+import { AuthContext } from "../navigation/AuthProvider";
+import { useIsFocused } from '@react-navigation/native';
+import colors from '../constants/colors';
 
 const DisplayLogsScreen = () => {
+  const isFocused = useIsFocused();
+  const {user} = useContext(AuthContext);
+  const userRef = db.collection('users').doc(user.uid);
+  const [logNames, setLogNames] = useState([]);
+
+  const existingNames = [];
+  let colorIdx = 0;
+
+  useEffect(() => {
+    userRef.collection('logs').get().then(snapshot => {
+      snapshot.docs.map(doc => {
+        const curColor = colors.colorsArr[colorIdx % colors.colorsArr.length];
+        existingNames.push([doc.data().name, curColor]);
+        colorIdx += 1;
+      });
+      setLogNames(existingNames);
+    });
+  }, [isFocused]);
+
+  const logsArr = logNames.map(logName => (
+    <View
+      style={styles.box}
+      key={logName[0]}
+    >
+      <SelectBox
+        backgroundColor={logName[1]}
+        title={logName[0]}
+      />
+    </View>
+  ));
+
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.box}>
-          <SelectBox
-            backgroundColor='#FFF8DC'
-            title='Exercise'
-          />
-        </View>
-        <View style={styles.box}>
-          <SelectBox
-            // backgroundColor='#E6E6FA'
-            title='Cooking'
-          />
-        </View>
-        <View style={styles.box}>
-          <SelectBox
-            // backgroundColor='#E3FFB5'
-            title='Cleaning'
-          />
-        </View>
-        <View style={styles.box}>
-          <SelectBox
-            // backgroundColor='#AFEEEE'
-            title='Spending'
-          />
-        </View>
+        {logsArr}
       </View>
     </ScrollView>
   );

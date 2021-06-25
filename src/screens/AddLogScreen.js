@@ -16,19 +16,61 @@ const AddLogScreen = ({ navigation }) => {
   const {user} = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
 
+  const addLog = () => {
+    userRef.collection('logs').doc(logName.toLowerCase()).set({
+      id: logName.trim().toLowerCase(),
+      name: logName.trim(),
+      unit: unit.trim(),
+      minVal: minVal,
+      maxVal: maxVal,
+    });
+    userRef.update({
+      numLogs: firebase.firestore.FieldValue.increment(1),
+    });
+    navigation.navigate("Tabs");
+  }
+
+  const handleOnPress = async () => {
+    if (logName == '') {
+      alert('Log Name is a required field');
+      return;
+    }
+    if (isNaN(minVal) || isNaN(maxVal)) {
+      alert('Minimum Value and Maximum Value must be valid numbers');
+      return;
+    }
+    let exit = false;
+    await userRef.get().then(doc => {
+      if (doc.data().numLogs == 0) {
+        addLog();
+        exit = true;
+      }
+    });
+    if (exit) {
+      return;
+    }
+    await userRef.collection('logs').where('id', '==', logName.trim().toLowerCase()).get().then(snapshot => {
+      if (!snapshot.empty) {
+        alert('This log name already exists');
+      } else {
+        addLog();
+      }
+    });
+  }
+
   return (
     <DismissKeyboard>
       <View style={styles.container}>
         <TextInput 
           style={styles.inputBox}
           value={logName}
-          onChangeText={input => setLogName(input.trim())}
+          onChangeText={input => setLogName(input)}
           placeholder='Log Name *'
         />
         <TextInput
           style={styles.inputBox}
           value={unit}
-          onChangeText={input => setUnit(input.trim())}
+          onChangeText={input => setUnit(input)}
           placeholder='Unit (e.g. mins, kg, dollars)'
           autoCapitalize='none'
         />
@@ -58,24 +100,7 @@ const AddLogScreen = ({ navigation }) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            if (logName == '') {
-              alert('Log Name is a required field');
-              return;
-            }
-            if (isNaN(minVal) || isNaN(maxVal)) {
-              alert('Minimum Value and Maximum Value must be valid numbers');
-              return;
-            }
-            userRef.collection('logs').doc(logName.toLowerCase()).set({
-              name: logName,
-              unit: unit,
-              minVal: minVal,
-              maxVal: maxVal,
-            });
-            userRef.update({
-              numLogs: firebase.firestore.FieldValue.increment(1),
-            });
-            navigation.navigate("Tabs");
+            handleOnPress();
           }}
         >
           <BaseText style={styles.addLogText}>Add log</BaseText>

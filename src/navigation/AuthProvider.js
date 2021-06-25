@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }) => {
                   last: lastName,
                 },
                 numLogs: 0,
-                existingLogNames: [],
               });
             });
           } catch (e) {

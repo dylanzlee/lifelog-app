@@ -14,7 +14,7 @@ const ProfileScreen = () => {
   useEffect(() => {
     userRef.get().then(doc => {
       setUserName(doc.data().name.first.toString());
-    })
+    });
   }, []);
 
   return (

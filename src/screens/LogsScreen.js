@@ -17,17 +17,19 @@ const LogsScreen = () => {
   useEffect(() => {
     userRef.get().then(doc => {
       setNumLogs(doc.data().numLogs);
-    })
+    });
   }, [isFocused]);
 
   return (
-    <SafeAreaView style={styles.wrapper}>
-      {numLogs == 0 ? 
+    numLogs == 0 ? 
+      <SafeAreaView style={[styles.wrapper, { justifyContent: 'center', alignItems: 'center' }]}>
         <View style={styles.messageContainer}>
           <BaseText style={styles.message}>Your logs will be displayed here</BaseText>
         </View>
-        : <DisplayLogsScreen />}
-    </SafeAreaView>
+      </SafeAreaView> :
+      <SafeAreaView style={styles.wrapper}>
+        <DisplayLogsScreen />
+      </SafeAreaView>
   );
 }
 
@@ -35,8 +37,6 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   messageContainer: {
     justifyContent: 'center',
