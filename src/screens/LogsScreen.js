@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, SafeAreaView } from 'react-native';
+import { StyleSheet, View, SafeAreaView, TouchableOpacity } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import colors from '../constants/colors'; 
 import { BaseText } from '../constants/TextStyles';
@@ -24,7 +24,7 @@ const LogsScreen = () => {
     numLogs == 0 ? 
       <SafeAreaView style={[styles.wrapper, { justifyContent: 'center', alignItems: 'center' }]}>
         <View style={styles.messageContainer}>
-          <BaseText style={styles.message}>Your logs will be displayed here</BaseText>
+          <BaseText style={styles.message}>You have not added any logs yet!</BaseText>
         </View>
       </SafeAreaView> :
       <SafeAreaView style={styles.wrapper}>

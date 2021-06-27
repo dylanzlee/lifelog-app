@@ -13,7 +13,7 @@ const AddLogScreen = ({ navigation }) => {
   const [minVal, setMinVal] = useState(Number.MIN_VALUE);
   const [maxVal, setMaxVal] = useState(Number.MAX_VALUE);
 
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
 
   const addLog = () => {
@@ -23,6 +23,7 @@ const AddLogScreen = ({ navigation }) => {
       unit: unit.trim(),
       minVal: minVal,
       maxVal: maxVal,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     userRef.update({
       numLogs: firebase.firestore.FieldValue.increment(1),
@@ -32,7 +33,7 @@ const AddLogScreen = ({ navigation }) => {
 
   const handleOnPress = async () => {
     if (logName == '') {
-      alert('Log Name is a required field');
+      alert('Please enter a log name');
       return;
     }
     if (isNaN(minVal) || isNaN(maxVal)) {

@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, View, ScrollView } from 'react-native';
-import SelectBox from '../components/SelectBox';
 import { db } from '../../firebase';
 import { AuthContext } from "../navigation/AuthProvider";
-import { useIsFocused } from '@react-navigation/native';
+import SelectBox from '../components/SelectBox';
 import colors from '../constants/colors';
 
 const DisplayLogsScreen = () => {
-  const isFocused = useIsFocused();
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
   const [logNames, setLogNames] = useState([]);
 
@@ -16,7 +14,7 @@ const DisplayLogsScreen = () => {
   let colorIdx = 0;
 
   useEffect(() => {
-    userRef.collection('logs').get().then(snapshot => {
+    userRef.collection('logs').orderBy('timestamp', 'asc').get().then(snapshot => {
       snapshot.docs.map(doc => {
         const curColor = colors.colorsArr[colorIdx % colors.colorsArr.length];
         existingNames.push([doc.data().name, curColor]);
@@ -24,8 +22,8 @@ const DisplayLogsScreen = () => {
       });
       setLogNames(existingNames);
     });
-  }, [isFocused]);
-
+  }, [logNames]);
+  
   const logsArr = logNames.map(logName => (
     <View
       style={styles.box}
@@ -34,6 +32,7 @@ const DisplayLogsScreen = () => {
       <SelectBox
         backgroundColor={logName[1]}
         title={logName[0]}
+        logId={logName[0].toLowerCase()}
       />
     </View>
   ));

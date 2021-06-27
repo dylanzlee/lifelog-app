@@ -1,14 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { BaseText } from '../constants/TextStyles';
+import { useNavigation } from '@react-navigation/native';
 
-const SelectBox = (props) => {
+const SelectBox = ({ backgroundColor, title, logId }) => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={[styles.box, {
-      backgroundColor: props.backgroundColor, borderColor: props.backgroundColor
-      }]}>
-        <BaseText style={styles.text}>{props.title}</BaseText>
+      <TouchableOpacity
+        style={[styles.box, {
+          backgroundColor: backgroundColor, borderColor: backgroundColor
+        }]}
+        onPress={() => navigation.navigate("Status", {
+          logTitle: title,
+          logId: logId,
+          logColor: backgroundColor,
+        })}
+      >
+        <BaseText style={styles.text}>{title}</BaseText>
       </TouchableOpacity>
     </View>
   );
