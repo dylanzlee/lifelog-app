@@ -6,13 +6,14 @@ import colors from '../constants/colors';
 import { db } from '../../firebase';
 import firebase from 'firebase';
 import { AuthContext } from '../navigation/AuthProvider';
+import { AppContext } from '../navigation/AppProvider';
 
 const AddLogScreen = ({ navigation }) => {
   const [logName, setLogName] = useState('');
   const [unit, setUnit] = useState('');
   const [minVal, setMinVal] = useState(Number.MIN_VALUE);
   const [maxVal, setMaxVal] = useState(Number.MAX_VALUE);
-
+  const { toggleSwitch } = useContext(AppContext);
   const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
 
@@ -28,6 +29,7 @@ const AddLogScreen = ({ navigation }) => {
     userRef.update({
       numLogs: firebase.firestore.FieldValue.increment(1),
     });
+    toggleSwitch();
     navigation.navigate("Tabs");
   }
 

@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { db } from '../../firebase';
 import { AuthContext } from "../navigation/AuthProvider";
 import SelectBox from '../components/SelectBox';
 import colors from '../constants/colors';
+import { AppContext } from "../navigation/AppProvider";
 
 const DisplayLogsScreen = () => {
+  const mountedRef = useRef(true);
+  const { addSwitch } = useContext(AppContext);
   const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
   const [logNames, setLogNames] = useState([]);
@@ -13,16 +16,24 @@ const DisplayLogsScreen = () => {
   const existingNames = [];
   let colorIdx = 0;
 
-  useEffect(() => {
-    userRef.collection('logs').orderBy('timestamp', 'asc').get().then(snapshot => {
-      snapshot.docs.map(doc => {
-        const curColor = colors.colorsArr[colorIdx % colors.colorsArr.length];
-        existingNames.push([doc.data().name, curColor]);
-        colorIdx += 1;
+  useEffect(() => {    
+    const fetchData = async () => {
+      await userRef.collection('logs').orderBy('timestamp', 'asc').get().then(snapshot => {
+        snapshot.docs.map(doc => {
+          const curColor = colors.colorsArr[colorIdx % colors.colorsArr.length];
+          existingNames.push([doc.data().name, curColor]);
+          colorIdx += 1;
+        });
       });
       setLogNames(existingNames);
-    });
-  }, [logNames]);
+    }
+
+    fetchData();
+    return () => {
+      console.log('cleaned up: DisplayLogsScreen');
+      mountedRef.current = false;
+    }
+  }, [addSwitch]);
   
   const logsArr = logNames.map(logName => (
     <View
@@ -38,7 +49,9 @@ const DisplayLogsScreen = () => {
   ));
 
   return (
-    <ScrollView>
+    <ScrollView
+      alwaysBounceVertical={false}
+    >
       <View style={styles.container}>
         {logsArr}
       </View>

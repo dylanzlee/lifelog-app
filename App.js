@@ -1,13 +1,13 @@
 import React from 'react';
-import { AuthProvider } from './src/navigation/AuthProvider';
+// import { AuthProvider } from './src/navigation/AuthProvider';
+import { AppProvider } from './src/navigation/AppProvider';
 import Routes from './src/navigation/Routes';
-import AppNavigator from './src/navigation/AppNavigator';
 
 const App = () => {
   return (
-    <AuthProvider>
+    <AppProvider>
       <Routes />
-    </AuthProvider>
+    </AppProvider>
   );
 }
 

@@ -6,7 +6,7 @@ import { AuthContext } from '../navigation/AuthProvider';
 import { db } from '../../firebase';
 
 const ProfileScreen = () => {
-  const {user, logout} = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const [userName, setUserName] = useState('');
 
   const userRef = db.collection('users').doc(user.uid);

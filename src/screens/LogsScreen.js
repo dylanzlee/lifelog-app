@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import colors from '../constants/colors'; 
 import { BaseText } from '../constants/TextStyles';
