@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Modal, TouchableWithoutFeedback } from 'react-native';
-import Animated from 'react-native-reanimated';
 
 const StatusModalPopup = ({ visible, bgColor, handleModalCallback, children }) => {
   const [showModal, setShowModal] = useState(visible);
@@ -21,6 +20,7 @@ const StatusModalPopup = ({ visible, bgColor, handleModalCallback, children }) =
     <Modal
       transparent
       visible={showModal}
+      animationType='fade'
     >
       <TouchableWithoutFeedback
         onPress={handleModalCallback}

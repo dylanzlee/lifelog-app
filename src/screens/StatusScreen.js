@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { SafeAreaView, View, ScrollView, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { SafeAreaView, View, ScrollView, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { BaseText } from '../constants/TextStyles';
 import { db } from '../../firebase';
 import { AuthContext } from '../navigation/AuthProvider';
@@ -7,6 +7,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import StatusModalPopup from '../components/StatusModalPopup';
 import ConfirmDeletePopup from '../components/ConfirmDeletePopup';
+import LogCalendar from '../constants/LogCalendar';
 
 const StatusScreen = ({ route, navigation }) => {
   const { user } = useContext(AuthContext);
@@ -42,15 +43,17 @@ const StatusScreen = ({ route, navigation }) => {
             <BaseText style={styles.title}>{logTitle}</BaseText>
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1, paddingRight: 10, alignItems: 'flex-end', right: 5 }}>
+        <View style={styles.headerRight}>
+          <TouchableOpacity
+            style={{ marginRight: 10, }}
+            onPress={() => alert('to be implemented')}
+          >
+          <AntDesign name="plus" size={25} color="black" />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setVisible(true)}
           >
-            <Entypo
-              name="dots-three-horizontal"
-              size={24}
-              color="black"
-            />
+            <Entypo name="dots-three-horizontal" size={25} color="black" />
           </TouchableOpacity>
         </View>
       </View>
@@ -62,10 +65,11 @@ const StatusScreen = ({ route, navigation }) => {
       <ScrollView
         stickyHeaderIndices={[0]}
       >
-        <StatusHeader />
+        <StatusHeader style={{ paddingBottom: 5, }} />
         <ConfirmDeletePopup
           visible={deleteVisible}
           handlePopupCallback={handlePopupCallback}
+          logId={logId}
         />
         <StatusModalPopup
           visible={visible}
@@ -96,15 +100,10 @@ const StatusScreen = ({ route, navigation }) => {
             </View>
           </View>
         </StatusModalPopup>
-        <View>
-          <BaseText>Lorem Ipsum</BaseText>
-        </View>
-        <View>
-          <BaseText>Lorem Ipsum</BaseText>
-        </View>
-        <View>
-          <BaseText>Lorem Ipsum</BaseText>
-        </View>
+        <LogCalendar
+          logId={logId}
+          logColor={logColor}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -126,7 +125,14 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 19,
+  },
+  headerRight: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingRight: 10,
+    justifyContent: 'flex-end',
+    right: 5,
   },
   modalHeader: {
     width: '100%',
@@ -140,7 +146,10 @@ const styles = StyleSheet.create({
   deleteText: {
     color: 'red',
     fontSize: 20,
-  }
+  },
+  calendar: {
+    
+  },
 });
 
 export default StatusScreen;

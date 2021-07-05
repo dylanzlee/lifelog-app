@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, Modal, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { BaseText } from '../constants/TextStyles';
+import { db } from '../../firebase';
+import { AuthContext } from '../navigation/AuthProvider';
+import { AppContext } from '../navigation/AppProvider';
+import { useNavigation } from '@react-navigation/native';
+import firebase from 'firebase';
 
-const ConfirmDeletePopup = ({ visible, handlePopupCallback }) => {
+const ConfirmDeletePopup = ({ visible, handlePopupCallback, logId }) => {
+  const navigation = useNavigation();
+  const { user } = useContext(AuthContext);
+  const userRef = db.collection('users').doc(user.uid);
+  const { toggleSwitch } = useContext(AppContext);
   const [showPopup, setShowPopup] = useState(visible);
 
   useEffect(() => {
@@ -18,6 +26,13 @@ const ConfirmDeletePopup = ({ visible, handlePopupCallback }) => {
     }
   }
 
+  const handleOnPress = async () => {
+    await userRef.collection('logs').doc(logId).delete();
+    await userRef.update({
+      numLogs: firebase.firestore.FieldValue.increment(-1),
+    }).then(toggleSwitch()).then(handlePopupCallback).then(navigation.navigate("Tabs"));
+  }
+
   return (
     <Modal
       transparent
@@ -30,19 +45,22 @@ const ConfirmDeletePopup = ({ visible, handlePopupCallback }) => {
           <TouchableWithoutFeedback
             onPress={() => {}}
           >
-            <Animated.View style={styles.popupContainer}>
+            <View style={styles.popupContainer}>
               <View style={{ alignItems: 'center' }}>
                 <View style={styles.message}>
                   <BaseText>Are you sure you want to delete this log?</BaseText>
                   <BaseText>All data associated with this log will be lost.</BaseText>
                 </View>
                 <View>
-                  <TouchableOpacity style={styles.deleteButton}>
+                  <TouchableOpacity
+                    style={styles.deleteButton}
+                    onPress={handleOnPress}
+                  >
                     <BaseText style={styles.confirmDeleteText}>Confirm delete</BaseText>
                   </TouchableOpacity>
                 </View>
               </View>
-            </Animated.View>
+            </View>
           </TouchableWithoutFeedback>
         </View>
       </TouchableWithoutFeedback>

@@ -10,6 +10,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import AddLogScreen from '../screens/AddLogScreen';
 import SelectBox from '../components/SelectBox';
 import StatusScreen from '../screens/StatusScreen';
+import ConfirmDeletePopup from '../components/ConfirmDeletePopup';
 
 const Tab = createBottomTabNavigator();
 
@@ -94,6 +95,11 @@ const ModalNavigator = () => {
           ),
           headerLeftContainerStyle: styles.crossButton,
         })}
+      />
+      <ModalStack.Screen
+        name="ConfirmDelete"
+        component={ConfirmDeletePopup}
+        options={{ headerShown: false }}
       />
     </ModalStack.Navigator>
   );

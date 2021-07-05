@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { BaseText } from '../constants/TextStyles';
-import DismissKeyboard from '../components/DismissKeyboard';
-import colors from '../constants/colors';
 import { db } from '../../firebase';
-import firebase from 'firebase';
 import { AuthContext } from '../navigation/AuthProvider';
 import { AppContext } from '../navigation/AppProvider';
+import GestureRecognizer from 'react-native-swipe-gestures';
+import DismissKeyboard from '../components/DismissKeyboard';
+import colors from '../constants/colors';
+import firebase from 'firebase';
 
 const AddLogScreen = ({ navigation }) => {
   const [logName, setLogName] = useState('');
@@ -17,13 +18,21 @@ const AddLogScreen = ({ navigation }) => {
   const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
 
+  const getRandomColor = () => {
+    const randomHue = Math.floor(Math.random() * 60) * 6;
+    const randomColor = `hsl(${randomHue}, 70%, 80%)`;
+    return randomColor;
+  }
+
   const addLog = () => {
+    const logColor = getRandomColor();
     userRef.collection('logs').doc(logName.toLowerCase()).set({
       id: logName.trim().toLowerCase(),
       name: logName.trim(),
       unit: unit.trim(),
       minVal: minVal,
       maxVal: maxVal,
+      color: logColor,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     userRef.update({
@@ -62,54 +71,59 @@ const AddLogScreen = ({ navigation }) => {
   }
 
   return (
-    <DismissKeyboard>
-      <View style={styles.container}>
-        <TextInput 
-          style={styles.inputBox}
-          value={logName}
-          onChangeText={input => setLogName(input)}
-          placeholder='Log Name *'
-        />
-        <TextInput
-          style={styles.inputBox}
-          value={unit}
-          onChangeText={input => setUnit(input)}
-          placeholder='Unit (e.g. mins, kg, dollars)'
-          autoCapitalize='none'
-        />
-        <TextInput
-          style={styles.inputBox}
-          value={minVal}
-          onChangeText={input => {
-            let minInput = input == '' ? Number.MIN_VALUE : input;
-            setMinVal(parseFloat(minInput));
-          }}
-          placeholder='Minimum Value'
-          numeric value
-          keyboardType={'numeric'}
-        />
-        <TextInput
-          style={styles.inputBox}
-          value={maxVal}
-          onChangeText={input => {
-            let maxInput = input == '' ? Number.MAX_VALUE : input;
-            setMaxVal(parseFloat(maxInput));
-          }}
-          placeholder='Maximum Value'
-          numeric value
-          keyboardType={'numeric'}
-        />
-        <BaseText style={styles.note}>Note: Fields with * are required</BaseText>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            handleOnPress();
-          }}
-        >
-          <BaseText style={styles.addLogText}>Add log</BaseText>
-        </TouchableOpacity>
-      </View>
-    </DismissKeyboard>
+    <GestureRecognizer
+      style={{ flex: 1, height: '100%', width: '100%' }}
+      onSwipeDown={() => navigation.goBack()}
+    >
+      <DismissKeyboard>
+        <View style={styles.container}>
+          <TextInput 
+            style={styles.inputBox}
+            value={logName}
+            onChangeText={input => setLogName(input)}
+            placeholder='Log Name *'
+          />
+          <TextInput
+            style={styles.inputBox}
+            value={unit}
+            onChangeText={input => setUnit(input)}
+            placeholder='Unit (e.g. mins, kg, dollars)'
+            autoCapitalize='none'
+          />
+          <TextInput
+            style={styles.inputBox}
+            value={minVal}
+            onChangeText={input => {
+              let minInput = input == '' ? Number.MIN_VALUE : input;
+              setMinVal(parseFloat(minInput));
+            }}
+            placeholder='Minimum Value'
+            numeric value
+            keyboardType={'numeric'}
+          />
+          <TextInput
+            style={styles.inputBox}
+            value={maxVal}
+            onChangeText={input => {
+              let maxInput = input == '' ? Number.MAX_VALUE : input;
+              setMaxVal(parseFloat(maxInput));
+            }}
+            placeholder='Maximum Value'
+            numeric value
+            keyboardType={'numeric'}
+          />
+          <BaseText style={styles.note}>Note: Fields marked with * are required</BaseText>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleOnPress();
+            }}
+          >
+            <BaseText style={styles.addLogText}>Add log</BaseText>
+          </TouchableOpacity>
+        </View>
+      </DismissKeyboard>
+    </GestureRecognizer>
   );
 }
 

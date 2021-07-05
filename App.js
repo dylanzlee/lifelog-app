@@ -1,5 +1,4 @@
 import React from 'react';
-// import { AuthProvider } from './src/navigation/AuthProvider';
 import { AppProvider } from './src/navigation/AppProvider';
 import Routes from './src/navigation/Routes';
 

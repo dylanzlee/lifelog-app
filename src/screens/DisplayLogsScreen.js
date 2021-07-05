@@ -3,7 +3,6 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 import { db } from '../../firebase';
 import { AuthContext } from "../navigation/AuthProvider";
 import SelectBox from '../components/SelectBox';
-import colors from '../constants/colors';
 import { AppContext } from "../navigation/AppProvider";
 
 const DisplayLogsScreen = () => {
@@ -14,15 +13,12 @@ const DisplayLogsScreen = () => {
   const [logNames, setLogNames] = useState([]);
 
   const existingNames = [];
-  let colorIdx = 0;
 
   useEffect(() => {    
     const fetchData = async () => {
       await userRef.collection('logs').orderBy('timestamp', 'asc').get().then(snapshot => {
         snapshot.docs.map(doc => {
-          const curColor = colors.colorsArr[colorIdx % colors.colorsArr.length];
-          existingNames.push([doc.data().name, curColor]);
-          colorIdx += 1;
+          existingNames.push([doc.data().name, doc.data().color]);
         });
       });
       setLogNames(existingNames);
@@ -30,7 +26,6 @@ const DisplayLogsScreen = () => {
 
     fetchData();
     return () => {
-      console.log('cleaned up: DisplayLogsScreen');
       mountedRef.current = false;
     }
   }, [addSwitch]);
