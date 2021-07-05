@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { BaseText } from './TextStyles';
+import { BaseText } from '../constants/TextStyles';
 import { AntDesign } from '@expo/vector-icons';
 import CalendarStrip from 'react-native-calendar-strip';
 
