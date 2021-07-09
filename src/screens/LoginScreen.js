@@ -1,14 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import DismissKeyboard from '../components/DismissKeyboard';
 import { BaseText } from '../constants/TextStyles';
 import { AuthContext } from '../navigation/AuthProvider';
 import colors from '../constants/colors';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const {login} = useContext(AuthContext);
 
   return (
@@ -53,11 +52,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.authBGColor,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   nameContainer: {
     marginBottom: 20,
-    paddingBottom: 50
+    paddingBottom: 50,
   },
   name: {
     fontSize: 40,
@@ -83,7 +82,7 @@ const styles = StyleSheet.create({
     borderColor: colors.authButtonColor,
     borderWidth: 1,
     borderRadius: 20,
-    width: 240
+    width: 240,
   },
   buttonText: {
     fontSize: 18,

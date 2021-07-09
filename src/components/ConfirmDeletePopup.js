@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     borderColor: 'red',
     borderWidth: 2,
     borderRadius: 20,
-    width: 160
+    width: 160,
   },
   confirmDeleteText: {
     color: 'red',

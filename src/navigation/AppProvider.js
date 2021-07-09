@@ -9,6 +9,18 @@ export const AppProvider = ({ children }) => {
     toggleSwitch: () => {
       settings.addSwitch = !settings.addSwitch;
     },
+    updateEntries: false,
+    setUpdateEntries: () => {
+      settings.updateEntries = !settings.updateEntries;
+    },
+    addDate: false,
+    toggleAddDate: () => {
+      settings.addDate = !settings.addDate;
+    },
+    dateSelected: 'date',
+    setDateSelected: date => {
+      settings.dateSelected = date;
+    }
   };
 
   return (

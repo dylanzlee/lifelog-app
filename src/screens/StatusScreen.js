@@ -1,20 +1,27 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { SafeAreaView, View, ScrollView, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { BaseText } from '../constants/TextStyles';
 import { db } from '../../firebase';
 import { AuthContext } from '../navigation/AuthProvider';
+import { AppContext } from '../navigation/AppProvider';
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import StatusModalPopup from '../components/StatusModalPopup';
 import ConfirmDeletePopup from '../components/ConfirmDeletePopup';
-import LogCalendar from '../constants/LogCalendar';
+import AddEntryPopup from '../components/AddEntryPopup';
+import LogCalendar from '../components/LogCalendar';
+import AppCalendar from '../components/AppCalendar';
+import { useIsFocused } from '@react-navigation/native';
 
 const StatusScreen = ({ route, navigation }) => {
+  const isFocused = useIsFocused();
+  const { toggleAddDate, addDate } = useContext(AppContext);
   const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
   const { logId, logTitle, logColor } = route.params;
   const [visible, setVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
+  const [addEntryVisible, setAddEntryVisible] = useState(false);
 
   const handleModalCallback = () => {
     setVisible(false);
@@ -24,6 +31,10 @@ const StatusScreen = ({ route, navigation }) => {
     setDeleteVisible(false);
   }
 
+  const handleAddEntryCallback = () => {
+    setAddEntryVisible(false);
+  }
+
   const StatusHeader = () => {
     return (
       <View style={[styles.header, { backgroundColor: logColor }]}>
@@ -31,11 +42,7 @@ const StatusScreen = ({ route, navigation }) => {
           <TouchableOpacity
             onPress={() => navigation.goBack()}
           >
-            <AntDesign
-              name="left"
-              size={35}
-              style={styles.backButton}
-            />
+            <AntDesign name="left" size={35} style={styles.backButton} />
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}>
@@ -46,7 +53,7 @@ const StatusScreen = ({ route, navigation }) => {
         <View style={styles.headerRight}>
           <TouchableOpacity
             style={{ marginRight: 10, }}
-            onPress={() => alert('to be implemented')}
+            onPress={() => setAddEntryVisible(true)}
           >
           <AntDesign name="plus" size={25} color="black" />
           </TouchableOpacity>
@@ -65,7 +72,13 @@ const StatusScreen = ({ route, navigation }) => {
       <ScrollView
         stickyHeaderIndices={[0]}
       >
-        <StatusHeader style={{ paddingBottom: 5, }} />
+        <StatusHeader style={{ paddingBottom: 5 }} />
+        <AddEntryPopup
+          visible={addEntryVisible}
+          handleAddEntryCallback={handleAddEntryCallback}
+          logColor={logColor}
+          logId={logId}
+        />
         <ConfirmDeletePopup
           visible={deleteVisible}
           handlePopupCallback={handlePopupCallback}
@@ -81,11 +94,7 @@ const StatusScreen = ({ route, navigation }) => {
               <TouchableOpacity
                 onPress={() => setVisible(false)}
               >
-                <AntDesign
-                  name="close"
-                  size={28}
-                  color='black'
-                />
+                <AntDesign name="close" size={28} color='black' />
               </TouchableOpacity>
             </View>
             <View style={styles.deleteContainer}>

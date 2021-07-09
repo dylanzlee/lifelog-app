@@ -33,6 +33,7 @@ const AddLogScreen = ({ navigation }) => {
       minVal: minVal,
       maxVal: maxVal,
       color: logColor,
+      numEntries: 0,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     userRef.update({
@@ -49,6 +50,10 @@ const AddLogScreen = ({ navigation }) => {
     }
     if (isNaN(minVal) || isNaN(maxVal)) {
       alert('Minimum Value and Maximum Value must be valid numbers');
+      return;
+    }
+    if (maxVal < minVal) {
+      alert('Maximum Value cannot be smaller than Minimum Value');
       return;
     }
     let exit = false;
