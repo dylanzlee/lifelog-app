@@ -19,6 +19,14 @@ const LogCalendar = ({ logId, logColor }) => {
   const [datesAdded, setDatesAdded] = useState([]);
   const [calendarDayString, setCalendarDayString] = useState('');
   const [visible, setVisible] = useState(false);
+  const [logUnit, setLogUnit] = useState('');
+  // const [clickedDate, setClickedDate] = useState(moment());
+
+  useEffect(() => {
+    userRef.collection('logs').doc(logId).get().then(doc => {
+      setLogUnit(doc.data().unit.toString());
+    });
+  }, []);
 
   useEffect(() => {
     userRef.collection('logs').doc(logId).get().then(doc => {
@@ -42,6 +50,8 @@ const LogCalendar = ({ logId, logColor }) => {
     }
   }, [addDate]);
 
+  const datesBlacklist = [{ start: moment().add(1, 'days'), end: moment().add(500, 'days') }];
+
   const markedDatesArr = []
   for (let i = 0; i < datesAdded.length; ++i) {
     markedDatesArr.push({
@@ -58,7 +68,10 @@ const LogCalendar = ({ logId, logColor }) => {
     <View style={{ flex: 1, height: '100%', width: '100%' }}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <BaseText style={{ fontSize: 13 }}>Entries added: {numEntries}</BaseText>
+          <BaseText style={{ fontSize: 15 }}>Total Entries: {numEntries}</BaseText>
+          {logUnit ?
+            <BaseText style={{ fontSize: 15 }}>({logUnit})</BaseText> :
+            <View />}
         </View>
         <View style={styles.calendarContainer}>
           <CalendarStrip
@@ -77,13 +90,18 @@ const LogCalendar = ({ logId, logColor }) => {
             highlightDateNameStyle={[styles.calendarText, styles.dateName]}
             iconContainer={{flex: 0.1}}
             upperCaseDays={false}
+            minDate={moment().subtract(365, 'days')}
+            maxDate={moment().add(500, 'days')}
             markedDates={markedDatesArr}
-            onDateSelected={async (date) => {
+            onDateSelected={date => {
+              // setClickedDate(date);
               const [month, day, year] = date.format('L').split('/');
               setCalendarDayString(`${year}-${month}-${day}`);
               setDateSelected(`${year}-${month}-${day}`);
               setVisible(true);
             }}
+            // selectedDate={clickedDate}
+            datesBlacklist={datesBlacklist}
           />
         </View>
       </View>
@@ -103,7 +121,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingLeft: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
     paddingVertical: 10,
   },
   calendarContainer: {

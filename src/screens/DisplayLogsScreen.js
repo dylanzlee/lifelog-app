@@ -23,7 +23,7 @@ const DisplayLogsScreen = () => {
       });
       setLogNames(existingNames);
     }
-
+    
     fetchData();
     return () => {
       mountedRef.current = false;

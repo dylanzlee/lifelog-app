@@ -4,6 +4,7 @@ import { BaseText } from '../constants/TextStyles';
 import { db } from '../../firebase';
 import { AuthContext } from '../navigation/AuthProvider';
 import { AppContext } from '../navigation/AppProvider';
+import { convertDateToUnix } from './LogGraph';
 import moment from 'moment';
 import firebase from 'firebase';
 
@@ -70,6 +71,7 @@ const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => 
     await userRef.collection('logs').doc(logId).collection('calendar').doc(dateString).set({
       dateString: dateString,
       timestamp: fTimestamp,
+      unix: convertDateToUnix(dateString),
       value: parseFloat(entry),
     });
     if (!entryExists) {

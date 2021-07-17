@@ -10,12 +10,9 @@ import StatusModalPopup from '../components/StatusModalPopup';
 import ConfirmDeletePopup from '../components/ConfirmDeletePopup';
 import AddEntryPopup from '../components/AddEntryPopup';
 import LogCalendar from '../components/LogCalendar';
-import AppCalendar from '../components/AppCalendar';
-import { useIsFocused } from '@react-navigation/native';
+import LogGraph from '../components/LogGraph';
 
 const StatusScreen = ({ route, navigation }) => {
-  const isFocused = useIsFocused();
-  const { toggleAddDate, addDate } = useContext(AppContext);
   const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
   const { logId, logTitle, logColor } = route.params;
@@ -45,7 +42,7 @@ const StatusScreen = ({ route, navigation }) => {
             <AntDesign name="left" size={35} style={styles.backButton} />
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, }}>
           <TouchableOpacity>
             <BaseText style={styles.title}>{logTitle}</BaseText>
           </TouchableOpacity>
@@ -113,6 +110,10 @@ const StatusScreen = ({ route, navigation }) => {
           logId={logId}
           logColor={logColor}
         />
+        <LogGraph
+          logId={logId}
+          logColor={logColor}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -155,9 +156,6 @@ const styles = StyleSheet.create({
   deleteText: {
     color: 'red',
     fontSize: 20,
-  },
-  calendar: {
-    
   },
 });
 

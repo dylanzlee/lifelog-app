@@ -1,24 +1,27 @@
 import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import colors from '../constants/colors'; 
 import { BaseText } from '../constants/TextStyles';
-import DisplayLogsScreen from "./DisplayLogsScreen";
 import { db } from '../../firebase';
 import { AuthContext } from '../navigation/AuthProvider';
+import { AppContext } from "../navigation/AppProvider";
+import DisplayLogsScreen from "./DisplayLogsScreen";
+import colors from '../constants/colors'; 
 
 const LogsScreen = () => {
   const isFocused = useIsFocused();
-  const {user} = useContext(AuthContext);
+  const { addSwitch } = useContext(AppContext);
+  const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
-
   const [numLogs, setNumLogs] = useState(0);
+
+  useEffect(() => {}, [isFocused]);
 
   useEffect(() => {
     userRef.get().then(doc => {
       setNumLogs(doc.data().numLogs);
     });
-  }, [isFocused]);
+  }, [addSwitch]);
 
   return (
     numLogs == 0 ? 

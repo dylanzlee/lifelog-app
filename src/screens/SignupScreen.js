@@ -54,7 +54,17 @@ const SignupScreen = () => {
         />
         <TouchableOpacity
           style={styles.button}
-          onPress={() => register(firstName, lastName, email, password)}
+          onPress={() => {
+            if (!firstName) {
+              alert('Please enter your first name');
+              return;
+            }
+            if (!lastName) {
+              alert('Please enter your last name');
+              return;
+            }
+            register(firstName, lastName, email, password);
+          }}
         >
           <BaseText style={styles.buttonText}>
             Create account
