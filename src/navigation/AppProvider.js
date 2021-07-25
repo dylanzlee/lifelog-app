@@ -10,17 +10,24 @@ export const AppProvider = ({ children }) => {
     toggleSwitch: () => {
       settings.addSwitch = !settings.addSwitch;
     },
-    updateEntries: false, // used as an indicator for when numEntries changes for a log
+    // used as an indicator for when numEntries changes for a log
+    updateEntries: false,
     setUpdateEntries: () => {
       settings.updateEntries = !settings.updateEntries;
     },
-    addDate: false, // used to mark when an entry is added, updated or removed from a log's calendar
+    // used to mark when an entry is added, updated or removed from a log's calendar
+    addDate: false,
     toggleAddDate: () => {
       settings.addDate = !settings.addDate;
     },
     dateSelected: 'date',
     setDateSelected: date => {
       settings.dateSelected = date;
+    },
+    // used to indicate when the user has edited profile
+    profileChange: false,
+    toggleProfileChange: () => {
+      settings.profileChange = !settings.profileChange;
     },
   };
 

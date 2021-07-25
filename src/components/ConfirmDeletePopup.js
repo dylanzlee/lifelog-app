@@ -30,7 +30,10 @@ const ConfirmDeletePopup = ({ visible, handlePopupCallback, logId }) => {
     await userRef.collection('logs').doc(logId).delete();
     await userRef.update({
       numLogs: firebase.firestore.FieldValue.increment(-1),
-    }).then(toggleSwitch()).then(handlePopupCallback).then(navigation.navigate("Tabs"));
+    }) //.then(toggleSwitch()).then(handlePopupCallback).then(navigation.navigate("Tabs"));
+    toggleSwitch();
+    handlePopupCallback();
+    navigation.navigate("Tabs");
   }
 
   return (

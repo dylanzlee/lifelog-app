@@ -9,7 +9,7 @@ import moment from 'moment';
 import firebase from 'firebase';
 
 const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => {
-  const { setUpdateEntries, toggleAddDate } = useContext(AppContext);
+  const { setUpdateEntries, toggleAddDate, addDate } = useContext(AppContext);
   const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
   const [showPopup, setShowPopup] = useState(false);
@@ -19,8 +19,7 @@ const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => 
   const [entry, setEntry] = useState(0);
 
   const todayDateDisplay = moment().format('MMMM Do');
-  const [month, day, year] = moment().format('L').split('/');
-  const dateString = `${year}-${month}-${day}`;
+  const dateString = moment().format('YYYY-MM-DD');
   const dateToday = new Date(dateString);
   const fTimestamp = new firebase.firestore.Timestamp.fromDate(dateToday);
 
@@ -31,12 +30,12 @@ const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => 
     userRef.collection('logs').doc(logId).collection('calendar').doc(dateString).get().then(snapshot => {
       if (snapshot.exists) {
         setEntryExists(true);
-        setPrevEntry(snapshot.data().value);
+        setPrevEntry(Math.round(snapshot.data().value * 1e3) / 1e3);
       } else {
         setEntryExists(false);
       }
     });
-  }, []);
+  }, [addDate]);
 
   useEffect(() => {
     togglePopup();
@@ -80,7 +79,7 @@ const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => 
       });
       setUpdateEntries();
     }
-    setPrevEntry(parseFloat(entry));
+    setPrevEntry(Math.round(parseFloat(entry) * 1e3) / 1e3);
     toggleAddDate();
     setEntryExists(true);
     handleAddEntryCallback();

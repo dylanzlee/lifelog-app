@@ -5,10 +5,6 @@ export const BaseText = (props) => (
   <Text style={{ ...styles.baseText, ...props.style }}>{props.children}</Text>
 );
 
-// export const AuthText = (props) => (
-//   <Text style={{ ...styles.authText, ...props.style }}>{props.children}</Text>
-// );
-
 const styles = StyleSheet.create({
   baseText: {
     fontFamily: 'Futura',

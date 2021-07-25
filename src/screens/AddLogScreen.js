@@ -44,7 +44,7 @@ const AddLogScreen = ({ navigation }) => {
   }
 
   const handleOnPress = async () => {
-    if (logName == '') {
+    if (logName.trim() == '') {
       alert('Please enter a log name');
       return;
     }

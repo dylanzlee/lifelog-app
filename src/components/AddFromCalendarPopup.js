@@ -9,7 +9,7 @@ import moment from 'moment';
 import firebase from 'firebase';
 
 const AddFromCalendarPopup = ({ visible, handleAddToCalendarCallback, logId, logColor, dateString }) => {
-  const { dateSelected, toggleAddDate, setUpdateEntries } = useContext(AppContext);
+  const { dateSelected, toggleAddDate, setUpdateEntries, addDate } = useContext(AppContext);
   const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
   const [showPopup, setShowPopup] = useState(false);
@@ -19,7 +19,6 @@ const AddFromCalendarPopup = ({ visible, handleAddToCalendarCallback, logId, log
   const [entry, setEntry] = useState(0);
 
   const selectedDate = moment(new Date(dateString));
-  const [month, day, year] = selectedDate.format('L').split('/');
   const selectedDateDisplay = selectedDate.utc().format('MMMM Do');
   const fTimestamp = new firebase.firestore.Timestamp.fromDate(new Date(dateString));
 
@@ -33,12 +32,12 @@ const AddFromCalendarPopup = ({ visible, handleAddToCalendarCallback, logId, log
     userRef.collection('logs').doc(logId).collection('calendar').doc(dateSelected).get().then(snapshot => {
       if (snapshot.exists) {
         setEntryExists(true);
-        setPrevEntry(snapshot.data().value);
+        setPrevEntry(Math.round(snapshot.data().value * 1e3) / 1e3);
       } else {
         setEntryExists(false);
       }
     });
-  }, [dateSelected]);
+  }, [dateSelected, addDate]);
   
   useEffect(() => {
     togglePopup();
@@ -82,7 +81,7 @@ const AddFromCalendarPopup = ({ visible, handleAddToCalendarCallback, logId, log
       });
       setUpdateEntries();
     }
-    setPrevEntry(parseFloat(entry));
+    setPrevEntry(Math.round(parseFloat(entry) * 1e3) / 1e3);
     toggleAddDate();
     setEntryExists(true);
     handleAddToCalendarCallback();
@@ -93,6 +92,7 @@ const AddFromCalendarPopup = ({ visible, handleAddToCalendarCallback, logId, log
     await userRef.collection('logs').doc(logId).update({
       numEntries: firebase.firestore.FieldValue.increment(-1),
     });
+    setUpdateEntries();
     toggleAddDate();
     setEntryExists(false);
     handleAddToCalendarCallback();

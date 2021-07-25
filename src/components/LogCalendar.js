@@ -48,7 +48,7 @@ const LogCalendar = ({ logId, logColor }) => {
     return () => {
       mountedRef.current = false;
     }
-  }, [addDate]);
+  }, [addDate, updateEntries]);
 
   const datesBlacklist = [{ start: moment().add(1, 'days'), end: moment().add(500, 'days') }];
 
@@ -75,8 +75,8 @@ const LogCalendar = ({ logId, logColor }) => {
         </View>
         <View style={styles.calendarContainer}>
           <CalendarStrip
-            scrollable
-            scrollerPaging
+            // scrollable
+            // scrollerPaging
             calendarAnimation={{ type: 'sequence', duration: 30 }}
             markingType={'custom'}
             leftSelector={<AntDesign name="left" size={22} color="black" />}
@@ -102,6 +102,7 @@ const LogCalendar = ({ logId, logColor }) => {
             }}
             // selectedDate={clickedDate}
             datesBlacklist={datesBlacklist}
+            calendarAnimation={{ type: 'parallel', duration: 1200 }}
           />
         </View>
       </View>

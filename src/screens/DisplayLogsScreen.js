@@ -44,9 +44,7 @@ const DisplayLogsScreen = () => {
   ));
 
   return (
-    <ScrollView
-      alwaysBounceVertical={false}
-    >
+    <ScrollView alwaysBounceVertical={false} >
       <View style={styles.container}>
         {logsArr}
       </View>
