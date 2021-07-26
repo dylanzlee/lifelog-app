@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, SafeAreaView, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, SafeAreaView, StyleSheet, TouchableOpacity, ScrollView, TextInput, Touchable } from 'react-native';
 import { BaseText } from '../constants/TextStyles';
 import { AuthContext } from '../navigation/AuthProvider';
 import { AppContext } from '../navigation/AppProvider';
@@ -10,6 +10,7 @@ import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import colors from '../constants/colors';
 import SummaryBox from '../components/SummaryBox';
+import DismissKeyboard from '../components/DismissKeyboard';
 
 const ProfileScreen = () => {
   const isFocused = useIsFocused();
@@ -17,17 +18,21 @@ const ProfileScreen = () => {
   const userRef = db.collection('users').doc(user.uid);
   const { addSwitch, profileChange, toggleProfileChange } = useContext(AppContext);
   const [initials, setInitials] = useState('');
-  const [userName, setUserName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [menuVisible, setMenuVisible] = useState(false);
   const [signoutModalVisible, setSignoutModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [logsInfo, setLogsInfo] = useState([]);
+  const [editedFirstName, setEditedFirstName] = useState('');
+  const [editedLastName, setEditedLastName] = useState('');
 
   useEffect(() => {}, [isFocused]);
 
   useEffect(() => {
     userRef.get().then(doc => {
-      setUserName(`${doc.data().name.first.toString()} ${doc.data().name.last.toString()}`);
+      setFirstName(doc.data().name.first.toString());
+      setLastName(doc.data().name.last.toString());
       setInitials(`${doc.data().name.first.toString()[0]}${doc.data().name.last.toString()[0]}`);
     });
   }, [profileChange]);
@@ -51,6 +56,27 @@ const ProfileScreen = () => {
     fetchInfo();
   }, [addSwitch]);
 
+  const handleOnEditSave = async () => {
+    if (!editedFirstName.trim() && !editedLastName.trim()) {
+      setEditModalVisible(false);
+      setEditedFirstName('');
+      setEditedLastName('');
+      return;
+    }
+    const first = editedFirstName.trim() ? editedFirstName.trim() : firstName;
+    const last = editedLastName.trim() ? editedLastName.trim() : lastName;
+    await userRef.update({
+      name: {
+        first: first,
+        last: last,
+      }
+    });
+    toggleProfileChange();
+    setEditModalVisible(false);
+    setEditedFirstName('');
+    setEditedLastName('');
+  }
+
   const logsInfoArr = logsInfo.map(log => (
     <View
       style={styles.summaryBoxContainer}
@@ -67,81 +93,108 @@ const ProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Modal
-        isVisible={editModalVisible}
-        animationInTiming={400}
-        animationOutTiming={400}
-        onBackdropPress={() => setEditModalVisible(false)}
-      >
-        <View style={styles.editModal}>
-          <BaseText>Edit profile</BaseText>
-        </View>
-      </Modal>
-      <Modal
-        isVisible={signoutModalVisible}
-        animationInTiming={400}
-        animationOutTiming={400}
-        onBackdropPress={() => setSignoutModalVisible(false)}
-      >
-        <View style={styles.signoutModal}>
-          <BaseText style={{ color: colors.authBGColor, fontSize: 15 }}>Are you sure you want to sign out?</BaseText>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => logout()}
-          >
-            <BaseText style={styles.signoutText}>Sign out</BaseText>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-      <View style={styles.titleBar}>
-        <Menu 
-          opened={menuVisible}
-          onSelect={value => {
-            if (value == 1) {
-              setMenuVisible(false);
-              setEditModalVisible(true);
-            } else {
-              setMenuVisible(false);
-              setSignoutModalVisible(true);
-            }
+        <Modal
+          isVisible={editModalVisible}
+          animationInTiming={400}
+          animationOutTiming={400}
+          onBackdropPress={() => {
+            setEditModalVisible(false);
+            setEditedFirstName('');
+            setEditedLastName('');
           }}
-          onBackdropPress={() => setMenuVisible(false)}
+          >
+          <DismissKeyboard>
+            <View style={styles.editModal}>
+              <TextInput
+                style={styles.inputBox}
+                value={editedFirstName}
+                onChangeText={input => setEditedFirstName(input)}
+                placeholder={firstName}
+                placeholderTextColor='rgba(0, 0, 0, 0.3)'
+              />
+              <TextInput
+                style={styles.inputBox}
+                value={editedLastName}
+                onChangeText={input => setEditedLastName(input)}
+                placeholder={lastName}
+                placeholderTextColor='rgba(0, 0, 0, 0.3)'
+              />
+              <TouchableOpacity
+                style={styles.saveButton}
+                onPress={() => {
+                  handleOnEditSave();
+                }}
+              >
+                <BaseText style={{ fontSize: 16, color: colors.authButtonColor }}>Save</BaseText>
+              </TouchableOpacity>
+            </View>
+          </DismissKeyboard>
+        </Modal>
+        <Modal
+          isVisible={signoutModalVisible}
+          animationInTiming={400}
+          animationOutTiming={400}
+          onBackdropPress={() => setSignoutModalVisible(false)}
         >
-          <MenuOptions optionsContainerStyle={styles.menuOptions}>
-            <MenuOption value={1} style={{ alignSelf: 'center' }}>
-              <BaseText style={{ color: colors.authBGColor, fontSize: 15 }}>Edit Profile</BaseText>
-            </MenuOption>
-            <MenuOption value={2} style={{ alignSelf: 'center' }}>
-              <BaseText style={{ color: 'red', fontSize: 15 }}>Sign out</BaseText>
-            </MenuOption>
-          </MenuOptions>
-          <View style={{ marginBottom: 10 }}>
-            <TouchableOpacity onPress={() => setMenuVisible(true)}>
-              <Entypo name="dots-three-vertical" size={24} color={colors.authButtonColor} />
+          <View style={styles.signoutModal}>
+            <BaseText style={{ color: colors.authBGColor, fontSize: 15 }}>Are you sure you want to sign out?</BaseText>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => logout()}
+            >
+              <BaseText style={styles.signoutText}>Sign out</BaseText>
             </TouchableOpacity>
           </View>
-          <MenuTrigger />
-        </Menu>
-      </View>
-      <ScrollView alwaysBounceVertical={false} >
-        <View style={[styles.profileContainer, { borderBottomColor: colors.authBGColor }]}>
-            <View style={styles.profileImage}>
-              <BaseText style={{ color: colors.authBGColor, fontSize: 50 }}>{initials}</BaseText>
-            </View>
-          <BaseText
-            style={{ color: colors.authButtonColor, fontSize: 22, marginTop: 16, marginBottom: 20 }}
+        </Modal>
+        <View style={styles.titleBar}>
+          <Menu 
+            opened={menuVisible}
+            onSelect={value => {
+              if (value == 1) {
+                setMenuVisible(false);
+                setEditModalVisible(true);
+              } else {
+                setMenuVisible(false);
+                setSignoutModalVisible(true);
+              }
+            }}
+            onBackdropPress={() => setMenuVisible(false)}
           >
-            {userName}
-          </BaseText>
+            <MenuOptions optionsContainerStyle={styles.menuOptions}>
+              <MenuOption value={1} style={{ alignSelf: 'center' }}>
+                <BaseText style={{ color: colors.authBGColor, fontSize: 15 }}>Edit Profile</BaseText>
+              </MenuOption>
+              <MenuOption value={2} style={{ alignSelf: 'center' }}>
+                <BaseText style={{ color: 'red', fontSize: 15 }}>Sign out</BaseText>
+              </MenuOption>
+            </MenuOptions>
+            <View style={{ marginBottom: 10 }}>
+              <TouchableOpacity onPress={() => setMenuVisible(true)}>
+                <Entypo name="dots-three-vertical" size={24} color={colors.authButtonColor} />
+              </TouchableOpacity>
+            </View>
+            <MenuTrigger />
+          </Menu>
         </View>
-        <View style={styles.detailsContainer}>
-          <BaseText style={{ color: colors.authButtonColor, fontSize: 16 }}>Summary:</BaseText>
-        </View>
-        <View style={styles.summaryContainer}>
-          {logsInfoArr}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        <ScrollView alwaysBounceVertical={false} >
+          <View style={[styles.profileContainer, { borderBottomColor: colors.authBGColor }]}>
+              <View style={styles.profileImage}>
+                <BaseText style={{ color: colors.authBGColor, fontSize: 50 }}>{initials}</BaseText>
+              </View>
+            <BaseText
+              style={{ color: colors.authButtonColor, fontSize: 22, marginTop: 16, marginBottom: 20 }}
+            >
+              {`${firstName} ${lastName}`}
+            </BaseText>
+          </View>
+          <View style={styles.detailsContainer}>
+            <BaseText style={{ color: colors.authButtonColor, fontSize: 16 }}>Summary:</BaseText>
+          </View>
+          <View style={styles.summaryContainer}>
+            {logsInfoArr}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
   );
 }
 
@@ -151,14 +204,35 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   editModal: {
-    height: '50%',
+    height: '30%',
     width: '80%',
-    backgroundColor: 'white',
+    backgroundColor: colors.authButtonColor,
     alignSelf: 'center',
     borderRadius: 20,
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  inputBox: {
+    width: '65%',
+    textAlign: 'center',
+    fontSize: 16,
+    fontFamily: 'Futura',
+    margin: 10,
+    padding: 5,
+    borderColor: colors.authBGColor,
+    borderBottomWidth: 1,
+    color: colors.authBGColor,
+  },
+  saveButton: {
+    marginTop: 20,
+    paddingVertical: 8,
+    alignItems: 'center',
+    backgroundColor: colors.authBGColor,
+    borderColor: colors.authButtonColor,
+    borderWidth: 1,
+    borderRadius: 20,
+    width: 120,
   },
   signoutModal: {
     height: '17%',

@@ -11,14 +11,37 @@ import ConfirmDeletePopup from '../components/ConfirmDeletePopup';
 import AddEntryPopup from '../components/AddEntryPopup';
 import LogCalendar from '../components/LogCalendar';
 import LogGraph from '../components/LogGraph';
+import moment from 'moment';
 
 const StatusScreen = ({ route, navigation }) => {
   const { user } = useContext(AuthContext);
+  const { addDate } = useContext(AppContext);
   const userRef = db.collection('users').doc(user.uid);
   const { logId, logTitle, logColor } = route.params;
   const [visible, setVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [addEntryVisible, setAddEntryVisible] = useState(false);
+  const [notesArr, setNotesArr] = useState([]);
+
+  useEffect(() => {
+    const tmpNotesArr = [];
+    const fetchNotes = async () => {
+      await userRef.collection('logs').doc(logId).collection('calendar')
+        .orderBy('timestamp', 'desc').limit(45).get().then(snapshot => {
+        snapshot.docs.map(doc => {
+          if (doc.data().note) {
+            tmpNotesArr.push({
+              date: moment(doc.data().dateString).format('M/D/YYYY'),
+              note: doc.data().note,
+              value: Math.round(doc.data().value * 1e3) / 1e3,
+            });
+          }
+        });
+      });
+      setNotesArr(tmpNotesArr);
+    }
+    fetchNotes();
+  }, [addDate]);
 
   const handleModalCallback = () => {
     setVisible(false);
@@ -31,6 +54,16 @@ const StatusScreen = ({ route, navigation }) => {
   const handleAddEntryCallback = () => {
     setAddEntryVisible(false);
   }
+
+  const displayNotesArr = notesArr.map(entry => (
+    <View
+      style={{ paddingVertical: 2, flexDirection: 'row', justifyContent: 'space-between'}}
+      key={entry.date}
+    >
+      <BaseText style={{ fontSize: 16 }}>{entry.date}: {entry.note}</BaseText>
+      <BaseText style={{ fontSize: 16 }}>({entry.value})</BaseText>
+    </View>
+  ));
 
   const StatusHeader = () => {
     return (
@@ -114,6 +147,15 @@ const StatusScreen = ({ route, navigation }) => {
           logId={logId}
           logColor={logColor}
         />
+        <View style={styles.notesContainer}>
+          <View style={{ flexDirection: 'row', marginBottom: 15 }}>
+            <BaseText style={{ fontSize: 16 }}>Recent notes: </BaseText>
+            {notesArr.length ? <View /> : <BaseText style={{ fontSize: 16 }}>None</BaseText>}
+          </View>
+          <View style={{ flex: 1 }}>
+            {displayNotesArr}
+          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -157,6 +199,14 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 20,
   },
+  notesContainer: {
+    padding: 10,
+    margin: 10,
+    borderWidth: 3,
+    borderColor: 'white',
+    borderRadius: 10,
+    height: 'auto',
+  }
 });
 
 export default StatusScreen;

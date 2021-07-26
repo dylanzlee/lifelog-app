@@ -12,7 +12,7 @@ import firebase from 'firebase';
 const AddLogScreen = ({ navigation }) => {
   const [logName, setLogName] = useState('');
   const [unit, setUnit] = useState('');
-  const [minVal, setMinVal] = useState(Number.MIN_VALUE);
+  const [minVal, setMinVal] = useState(0);
   const [maxVal, setMaxVal] = useState(Number.MAX_VALUE);
   const { toggleSwitch } = useContext(AppContext);
   const { user } = useContext(AuthContext);
@@ -99,7 +99,7 @@ const AddLogScreen = ({ navigation }) => {
             style={styles.inputBox}
             value={minVal}
             onChangeText={input => {
-              let minInput = input == '' ? Number.MIN_VALUE : input;
+              let minInput = input == '' ? 0 : input;
               setMinVal(parseFloat(minInput));
             }}
             placeholder='Minimum Value'

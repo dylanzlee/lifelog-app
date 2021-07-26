@@ -17,6 +17,8 @@ const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => 
   const [unit, setUnit] = useState('');
   const [prevEntry, setPrevEntry] = useState(0);
   const [entry, setEntry] = useState(0);
+  const [prevNote, setPrevNote] = useState('');
+  const [note, setNote] = useState('');
 
   const todayDateDisplay = moment().format('MMMM Do');
   const dateString = moment().format('YYYY-MM-DD');
@@ -31,8 +33,11 @@ const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => 
       if (snapshot.exists) {
         setEntryExists(true);
         setPrevEntry(Math.round(snapshot.data().value * 1e3) / 1e3);
+        setPrevNote(snapshot.data().note.toString());
       } else {
         setEntryExists(false);
+        setPrevEntry(0);
+        setPrevNote('');
       }
     });
   }, [addDate]);
@@ -50,16 +55,18 @@ const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => 
   }
 
   const handleOnPress = async () => {
-    if (!entry) {
+    if (!entry && !prevEntry) {
       alert('Please enter a value');
       return;
     }
+    const newEntry = entry ? entry : prevEntry;
+    const newNote = note ? note : prevNote;
     let exit = false;
     await userRef.collection('logs').doc(logId).get().then(doc => {
-      if (doc.data().minVal > parseFloat(entry)) {
+      if (doc.data().minVal > parseFloat(newEntry)) {
         alert('Entry value cannot be less than ' + doc.data().minVal);
         exit = true;
-      } else if (doc.data().maxVal < parseFloat(entry)) {
+      } else if (doc.data().maxVal < parseFloat(newEntry)) {
         alert('Entry value cannot be greater than ' + doc.data().maxVal);
         exit = true;
       }
@@ -71,7 +78,8 @@ const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => 
       dateString: dateString,
       timestamp: fTimestamp,
       unix: convertDateToUnix(dateString),
-      value: parseFloat(entry),
+      value: parseFloat(newEntry),
+      note: newNote.trim(),
     });
     if (!entryExists) {
       await userRef.collection('logs').doc(logId).update({
@@ -79,7 +87,9 @@ const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => 
       });
       setUpdateEntries();
     }
-    setPrevEntry(Math.round(parseFloat(entry) * 1e3) / 1e3);
+    setPrevEntry(Math.round(parseFloat(newEntry) * 1e3) / 1e3);
+    setPrevNote(newNote.trim());
+    setEntry(0);
     toggleAddDate();
     setEntryExists(true);
     handleAddEntryCallback();
@@ -92,7 +102,11 @@ const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => 
       animationType='fade'
     >
       <TouchableWithoutFeedback
-        onPress={handleAddEntryCallback}
+        onPress={() => {
+          handleAddEntryCallback();
+          setEntry(0);
+          setNote('');
+        }}
       >
         <View style={styles.popupBackground}>
         <TouchableWithoutFeedback
@@ -107,12 +121,20 @@ const AddEntryPopup = ({ visible, logId, logColor, handleAddEntryCallback }) => 
                 style={styles.inputBox}
                 value={entry}
                 onChangeText={input => setEntry(input)}
-                placeholder={entryExists ? prevEntry.toString() : unit}
+                placeholder={entryExists ? prevEntry.toString() : unit ? unit : 'Value'}
                 placeholderTextColor='rgba(0, 0, 0, 0.3)'
                 autoCapitalize='none'
                 numeric value
                 keyboardType={'numeric'}
                 autoFocus
+              />
+               <TextInput
+                style={[styles.inputBox, { width: '85%', marginTop: 15, marginBottom: 10 }]}
+                value={note}
+                onChangeText={input => setNote(input)}
+                placeholder={entryExists ? prevNote ? prevNote : 'Note' : 'Note'}
+                placeholderTextColor='rgba(0, 0, 0, 0.3)'
+                value
               />
               <TouchableOpacity
                 style={styles.button}
@@ -140,7 +162,7 @@ const styles = StyleSheet.create({
   },
   popupContainer: {
     width: '85%',
-    height: '25%',
+    height: '30%',
     justifyContent: 'space-around',
     paddingHorizontal: 20,
     paddingVertical: 20,
@@ -148,7 +170,7 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
   headerText: {
-    flex: 1.5,
+    flex: 1,
     alignItems: 'center',
   },
   content: {

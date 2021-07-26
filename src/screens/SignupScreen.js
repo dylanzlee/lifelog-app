@@ -23,14 +23,14 @@ const SignupScreen = () => {
           <TextInput
             style={styles.inputBoxSmall}
             value={firstName}
-            onChangeText={input => setFirstName(input.trim())}
+            onChangeText={input => setFirstName(input)}
             placeholder='First name'
             placeholderTextColor='black'
           />
           <TextInput
             style={styles.inputBoxSmall}
             value={lastName}
-            onChangeText={input => setLastName(input.trim())}
+            onChangeText={input => setLastName(input)}
             placeholder='Last name'
             placeholderTextColor='black'
           />
@@ -38,7 +38,7 @@ const SignupScreen = () => {
         <TextInput
           style={styles.inputBox}
           value={email}
-          onChangeText={input => setEmail(input.trim().toLowerCase())}
+          onChangeText={input => setEmail(input.trim())}
           placeholder='Email'
           placeholderTextColor='black'
           autoCapitalize='none'
@@ -63,7 +63,7 @@ const SignupScreen = () => {
               alert('Please enter your last name');
               return;
             }
-            register(firstName, lastName, email, password);
+            register(firstName.trim(), lastName.trim(), email.toLowerCase(), password);
           }}
         >
           <BaseText style={styles.buttonText}>
