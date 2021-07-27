@@ -39,7 +39,10 @@ export const AuthProvider = ({ children }) => {
           } catch (e) {
             alert(e);
           }
-        }
+        },
+        passwordReset: email => {
+          return auth.sendPasswordResetEmail(email);
+        },
       }}
     >
       {children}

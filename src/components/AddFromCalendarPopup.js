@@ -8,7 +8,7 @@ import { convertDateToUnix } from './LogGraph';
 import moment from 'moment';
 import firebase from 'firebase';
 
-const AddFromCalendarPopup = ({ visible, handleAddToCalendarCallback, logId, logColor, dateString }) => {
+const AddFromCalendarPopup = ({ visible, handleAddToCalendarCallback, logId, logColor, dateString, closeCalendarPopup }) => {
   const { dateSelected, toggleAddDate, setUpdateEntries, addDate } = useContext(AppContext);
   const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
@@ -94,6 +94,7 @@ const AddFromCalendarPopup = ({ visible, handleAddToCalendarCallback, logId, log
     toggleAddDate();
     setEntryExists(true);
     handleAddToCalendarCallback();
+    closeCalendarPopup();
   }
 
   const handleOnDelete = async () => {
@@ -105,6 +106,7 @@ const AddFromCalendarPopup = ({ visible, handleAddToCalendarCallback, logId, log
     toggleAddDate();
     setEntryExists(false);
     handleAddToCalendarCallback();
+    closeCalendarPopup();
   }
 
   return (

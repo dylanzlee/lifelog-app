@@ -9,9 +9,9 @@ import CalendarStrip from 'react-native-calendar-strip';
 import AddFromCalendarPopup from './AddFromCalendarPopup';
 import moment from 'moment';
 
-const LogCalendar = ({ logId, logColor }) => {
+const LogCalendar = ({ logId, logColor, openCalendarPopup, closeCalendarPopup }) => {
   const mountedRef = useRef(true);
-  const { addDate, dateSelected, setDateSelected } = useContext(AppContext);
+  const { addDate, setDateSelected } = useContext(AppContext);
   const { updateEntries } = useContext(AppContext);
   const { user } = useContext(AuthContext);
   const userRef = db.collection('users').doc(user.uid);
@@ -99,6 +99,7 @@ const LogCalendar = ({ logId, logColor }) => {
               setCalendarDayString(`${year}-${month}-${day}`);
               setDateSelected(`${year}-${month}-${day}`);
               setVisible(true);
+              openCalendarPopup();
             }}
             // selectedDate={clickedDate}
             datesBlacklist={datesBlacklist}
@@ -112,6 +113,7 @@ const LogCalendar = ({ logId, logColor }) => {
         logId={logId}
         logColor={logColor}
         dateString={calendarDayString}
+        closeCalendarPopup={closeCalendarPopup}
       />
     </View>
   );

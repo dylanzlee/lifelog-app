@@ -22,6 +22,9 @@ const StatusScreen = ({ route, navigation }) => {
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [addEntryVisible, setAddEntryVisible] = useState(false);
   const [notesArr, setNotesArr] = useState([]);
+  const [calendarPopupVisible, setCalendarPopupVisible] = useState(false);
+
+  useEffect(() => { console.log('changed'); }, [addDate]);
 
   useEffect(() => {
     const tmpNotesArr = [];
@@ -53,6 +56,14 @@ const StatusScreen = ({ route, navigation }) => {
 
   const handleAddEntryCallback = () => {
     setAddEntryVisible(false);
+  }
+
+  const openCalendarPopup = () => {
+    setCalendarPopupVisible(true);
+  }
+
+  const closeCalendarPopup = () => {
+    setCalendarPopupVisible(false);
   }
 
   const displayNotesArr = notesArr.map(entry => (
@@ -142,6 +153,8 @@ const StatusScreen = ({ route, navigation }) => {
         <LogCalendar
           logId={logId}
           logColor={logColor}
+          openCalendarPopup={openCalendarPopup}
+          closeCalendarPopup={closeCalendarPopup}
         />
         <LogGraph
           logId={logId}

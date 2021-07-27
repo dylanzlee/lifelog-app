@@ -3,16 +3,52 @@ import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import DismissKeyboard from '../components/DismissKeyboard';
 import { BaseText } from '../constants/TextStyles';
 import { AuthContext } from '../navigation/AuthProvider';
+import Modal from 'react-native-modal';
 import colors from '../constants/colors';
 
 const LoginScreen = () => {
+  const { login, passwordReset } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {login} = useContext(AuthContext);
+  const [resetPopupVisible, setResetPopupVisible] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
 
   return (
     <DismissKeyboard>
       <View style={styles.container}>
+        <Modal
+          isVisible={resetPopupVisible}
+          animationInTiming={400}
+          animationOutTiming={400}
+          onBackdropPress={() => {
+            setResetPopupVisible(false);
+            setResetEmail('');
+          }}
+        >
+          <DismissKeyboard>
+            <View style={styles.resetPasswordModal}>
+              <BaseText style={{ fontSize: 14 }}>Enter your email and we will send instructions to reset your password</BaseText>
+              <TextInput
+                style={styles.resetInputBox}
+                value={resetEmail}
+                onChangeText={input => setResetEmail(input.trim())}
+                placeholder='Your email'
+                placeholderTextColor='rgba(0, 0, 0, 0.3)'
+                autoCapitalize='none'
+              />
+              <TouchableOpacity
+                style={styles.resetButton}
+                onPress={() => {
+                  passwordReset(resetEmail);
+                  setResetPopupVisible(false);
+                  setResetEmail('');
+                }}
+              >
+                <BaseText style={{ fontSize: 16 }}>Send</BaseText>
+              </TouchableOpacity>
+            </View>
+          </DismissKeyboard>
+        </Modal>
         <View style={styles.nameContainer}>
           <BaseText style={styles.name}>log</BaseText>
         </View>
@@ -39,7 +75,7 @@ const LoginScreen = () => {
         >
           <BaseText style={styles.buttonText}>Login</BaseText>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => alert('R.I.P my guy :(')}>
+        <TouchableOpacity onPress={() => setResetPopupVisible(true)}>
           <BaseText style={styles.buttonForgotPassword}>Forgot your password?</BaseText>
         </TouchableOpacity>
       </View>
@@ -92,7 +128,36 @@ const styles = StyleSheet.create({
   buttonForgotPassword: {
     color: colors.authButtonColor,
     fontSize: 16,
-  }
+  },
+  resetPasswordModal: {
+    height: '30%',
+    width: '80%',
+    backgroundColor: colors.authButtonColor,
+    alignSelf: 'center',
+    borderRadius: 20,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  resetInputBox: {
+    width: '85%',
+    textAlign: 'center',
+    fontSize: 14,
+    fontFamily: 'Futura',
+    margin: 30,
+    padding: 5,
+    borderColor: colors.authBGColor,
+    borderBottomWidth: 1,
+    color: colors.authBGColor,
+  },
+  resetButton: {
+    paddingVertical: 6,
+    alignItems: 'center',
+    borderColor: colors.authBGColor,
+    borderWidth: 2,
+    borderRadius: 20,
+    width: 110,
+  },
 });
 
 export default LoginScreen;
