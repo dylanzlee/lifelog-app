@@ -1,10 +1,26 @@
-# lifelog-app
+# Lifelog App
+Create logs for any activity you wish to track in your daily life. Add/Update entries in your logs and see trends over time and summaries for each log.
 
-instructions after cloning:
+## Technologies
+Project is created with:
 
-1. yarn install
-2. yarn global add expo-cli
-3. Create new firebase project as a web app
-4. Replace config body in firebase file with your own configs
-5. Enable email/password authentication for your firebase project
-6. Create firestore database for your firebase project
+- Expo
+- React Native
+- Firebase (Authentication and Firestore)
+- Javascript
+
+## Setup
+To run this project, install it locally using yarn:
+
+`yarn install`
+
+Run `yarn global add expo-cli` to install Expo CLI
+
+Create a new web app in your firebase project. Then, enable email/password authentication and create firestore database for your app.
+
+Replace the config in `firebase.js` with your own firebase config.
+
+## Instructions to run Expo app (iOS Device) 
+1. Install the Expo client app from the App Store.
+2. Run `expo start` in your terminal
+3. Open Mobile Safari on your iPhone. Type the URL shown either in your Terminal or in Expo Dev Tools. You will be prompted to launch the App in the Expo Client App, select "Yes".
