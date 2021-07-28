@@ -3,15 +3,26 @@ import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import DismissKeyboard from '../components/DismissKeyboard';
 import { BaseText } from '../constants/TextStyles';
 import { AuthContext } from '../navigation/AuthProvider';
+import { auth } from '../../firebase';
 import Modal from 'react-native-modal';
 import colors from '../constants/colors';
 
 const LoginScreen = () => {
-  const { login, passwordReset } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [resetPopupVisible, setResetPopupVisible] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
+
+  const passwordReset = async (email) => {
+    try {
+      await auth.sendPasswordResetEmail(email);
+      setResetPopupVisible(false);
+      setResetEmail('');
+    } catch (e) {
+      alert(e);
+    }
+  }
 
   return (
     <DismissKeyboard>
@@ -40,8 +51,6 @@ const LoginScreen = () => {
                 style={styles.resetButton}
                 onPress={() => {
                   passwordReset(resetEmail);
-                  setResetPopupVisible(false);
-                  setResetEmail('');
                 }}
               >
                 <BaseText style={{ fontSize: 16 }}>Send</BaseText>
