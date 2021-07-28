@@ -11,10 +11,10 @@ Project is created with:
 
 ## Setup
 To run this project, install it locally using yarn:
-
 `yarn install`
 
-Run `yarn global add expo-cli` to install Expo CLI.
+Install Expo CLI:
+`yarn global add expo-cli`
 
 Create a new web app in your firebase project. Then, enable email/password authentication and create firestore database for your app.
 
