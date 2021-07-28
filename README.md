@@ -1,5 +1,5 @@
 # Lifelog App
-Create logs for any activity you wish to track in your daily life. Add/Update entries in your logs and see trends over time and summaries for each log.
+Create logs for any activities you wish to track in your daily life. Add/Update entries in your logs and see trends over time and summaries for each log.
 
 ## Technologies
 Project is created with:
