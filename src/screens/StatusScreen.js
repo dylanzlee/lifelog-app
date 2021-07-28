@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { SafeAreaView, View, ScrollView, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { SafeAreaView, View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { BaseText } from '../constants/TextStyles';
 import { db } from '../../firebase';
 import { AuthContext } from '../navigation/AuthProvider';
@@ -24,7 +24,7 @@ const StatusScreen = ({ route, navigation }) => {
   const [notesArr, setNotesArr] = useState([]);
   const [calendarPopupVisible, setCalendarPopupVisible] = useState(false);
 
-  useEffect(() => { console.log('changed'); }, [addDate]);
+  useEffect(() => {}, [addDate]);
 
   useEffect(() => {
     const tmpNotesArr = [];
