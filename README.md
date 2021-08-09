@@ -1,4 +1,4 @@
-# Lifelog App
+# Log App
 Create logs for any activities you wish to track in your daily life. Add/Update entries in your logs to maintain a record, see visual trends over time and summaries evaluated for each log.
 
 ## Technologies
